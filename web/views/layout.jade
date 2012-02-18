@@ -1,0 +1,42 @@
+!!! 5
+html
+  head
+    title Splunkbot Web Interface
+    link(rel='stylesheet', href='/bootstrap/css/bootstrap.css')
+    style(type='text/css')
+          body {
+          padding-top: 60px;
+          padding-bottom: 40px;
+          }
+    link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.css')
+  body
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href='#') Splunkbot
+          .nav-collapse
+            ul.nav
+              li.active
+                a(href='#') Home
+              li
+                a(href='search') Search
+              li
+                a(href='urls') URLs
+    != body
+    script(src='/bootstrap/js/jquery.js')
+    script(src='/bootstrap/js/bootstrap-transition.js')
+    script(src='/bootstrap/js/bootstrap-alert.js')
+    script(src='/bootstrap/js/bootstrap-modal.js')
+    script(src='/bootstrap/js/bootstrap-dropdown.js')
+    script(src='/bootstrap/js/bootstrap-scrollspy.js')
+    script(src='/bootstrap/js/bootstrap-tab.js')
+    script(src='/bootstrap/js/bootstrap-tooltip.js')
+    script(src='/bootstrap/js/bootstrap-popover.js')
+    script(src='/bootstrap/js/bootstrap-button.js')
+    script(src='/bootstrap/js/bootstrap-collapse.js')
+    script(src='/bootstrap/js/bootstrap-carousel.js')
+    script(src='/bootstrap/js/bootstrap-typeahead.js')

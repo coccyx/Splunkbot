@@ -2,14 +2,14 @@ var irc = require('irc');
 var util = require('util');
 var logsearch = require('./logsearch');
 var splunklog = require('./splunklog');
-var CONFIG = require('config').irc;
 //var web = require('./web/app');
 
 /*
 ** Constructor.  Create state in the object
 */
-IrcBot = function() {
-    this.client = new irc.Client(CONFIG.server, CONFIG.nick, CONFIG);
+IrcBot = function(config) {
+    this.config = config;
+    this.client = new irc.Client(this.config.server, this.config.nick, this.config);
     this.names = { };
 }
 
@@ -18,10 +18,10 @@ IrcBot = function() {
 */
 IrcBot.prototype.open = function() {
     splunklog.log(util.format("Connecting to IRC.  ircserver=%s, ircnick=%s, ircconfig=%j", 
-                    CONFIG.server, CONFIG.nick, CONFIG));
+                    this.config.server, this.config.nick, this.config));
     var ircBot = this;
-    this.client.connect(CONFIG.retryCount, function() {
-        splunklog.log(util.format("Connected.  ircserver=%s, ircnick=%s", CONFIG.server, CONFIG.nick));
+    this.client.connect(ircBot.config.retryCount, function() {
+        splunklog.log(util.format("Connected.  ircserver=%s, ircnick=%s", ircBot.config.server, ircBot.config.nick));
         
         ircBot.addListeners();
     });
@@ -96,19 +96,19 @@ IrcBot.prototype.addListeners = function() {
         var action = 'message';
         
         // Check if we're CTCP
-        if (text.charAt(0) == "\\x01") {
-            var seppos = text.search(" ") > 0 ? text.search(" ") : text.length;
+        if (text.charAt(0) == "\u0001") {
+            var seppos = text.search(" ") > 0 ? text.search(" ") : text.length-1;
             var command = text.substr(1, seppos-1);
             var argstr = text.substr(seppos+1);
             
             switch (command) {
                 case 'VERSION':
                     action = 'ctcp_version';
-                    ircBot.client.say(nick, "\\x01VERSION "+CONFIG.version+"\\x01");
+                    ircBot.client.notice(nick, "\u0001VERSION "+ircBot.config.version+"\u0001");
                     
                 case 'PING':
                     action = 'ctcp_ping';
-                    ircBot.client.say(nick, "\\x01PONG "+new Date.getTime()+"\\x01");
+                    ircBot.client.notice(nick, "\u0001PING "+Math.round(new Date().getTime()/1000,0)+"\u0001");
             }
         }
         
@@ -174,8 +174,8 @@ IrcBot.prototype.addListeners = function() {
     });
     
     // Every minute, send ourselves a PING
-    setTimeout(function() {
-            ircBot.client.say(CONFIG.nick, "\\x01PING "+new Date().getTime()+"\\x01");
+    setInterval(function() {
+            ircBot.client.say(ircBot.config.nick, "\u0001PING "+Math.round(new Date().getTime()/1000,0)+"\u0001");
         }, 60000);
 }
 

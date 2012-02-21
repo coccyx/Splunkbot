@@ -1,29 +1,38 @@
-.container
-  .hero-unit
-    h1 Hello, world!
+.hero-unit
+  h1 Welcome to Splunkbot!
+  p
+    | Splunkbot is an IRC bot written in node.js.  Splunkbot logs IRC traffic to Splunk and provides
+    | a really nice web interface for searching and analyzing those logs.
+  p
+    a.btn.btn-success.btn-large(href='http://github.com/coccyx/Splunkbot') Click here for our Github project &raquo;
+.row
+  .span3
+    h2 Stats
     p
-      | This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
+      | Check out analytics of the IRC Channels Splunkbot is on (EFNet #splunk and Undernet #macintosh)
+  .span3
+    h2 URLs
     p
-      a.btn.btn-primary.btn-large Learn more &raquo;
-  .row
-    .span4
-      h2 Heading
-      p
-        | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn(href='#') View details &raquo;
-    .span4
-      h2 Heading
-      p
-        | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn(href='#') View details &raquo;
-    .span4
-      h2 Heading
-      p
-        | Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-      p
-        a.btn(href='#') View details &raquo;
-  hr
-  footer
-    p &copy; Company 2012
+      | Before Twitter, link blogging, etc, there was IRC.  Check out the last URLs posted to channels to see what we're linking to.
+  .span3
+    h2 Live
+    p
+      | Using Splunk's real-time search capabilities, we can provide a realtime view into an IRC channel without being logged onto IRC,
+      | merely by looking at a real-time search of the logs.
+  .span3
+    h2 Search
+    p
+      | Last but not least, use Splunk's superior searching technology to search past logs, by nickname or any other text.
+.row
+  .span3
+    p
+      a.btn.btn-success(href='/stats') Click here &raquo;
+  .span3
+    p
+      a.btn.btn-success(href='/urls') Click here &raquo;
+  .span3
+    p
+      a.btn.btn-success(href='/live') Click here &raquo;
+  .span3
+    form(action='/search')
+      input(type='text', placeholder='Search', name='q').search-query.span2

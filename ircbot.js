@@ -1,6 +1,6 @@
 var irc = require('irc');
 var util = require('util');
-var logsearch = require('./logsearch');
+var search = require('./search');
 var splunklog = require('./splunklog');
 //var web = require('./web/app');
 
@@ -119,7 +119,7 @@ IrcBot.prototype.addListeners = function() {
             
             // Validate input
             if (!argstr.search("|")) {
-                ircBot.dispatchCommand(nick, command, argstr);
+                ircBot.dispatchCommand(nick, command, argstr, to);
             }
         }
         var objout = { server: this.opt.server, action: action, nick: nick, prettynick: ircBot.prettynick(to, nick),
@@ -183,14 +183,14 @@ IrcBot.prototype.addListeners = function() {
 ** When we receive a message, if it contains a preceding !, we send the parsed
 ** output to this function to determine which actions to take
 */
-IrcBot.prototype.dispatchCommand = function(nick, command, argstr) {
+IrcBot.prototype.dispatchCommand = function(nick, command, argstr, to) {
     var ircBot = this;
     var dispatch = { }
-    dispatch['seen'] = function() {
+    dispatch.seen = function() {
 
     }
-    dispatch['search'] = function() {
-        logsearch.search(argstr, function(err, log) {
+    dispatch.search = function() {
+        search.logsearch(argstr, function(err, log) {
                 if (typeof log === 'string') {
                     var logarr = log.split("\n");
                     for (var i=0; i<logarr.length; i++) {
@@ -199,8 +199,8 @@ IrcBot.prototype.dispatchCommand = function(nick, command, argstr) {
                 }
             });
     }
-    dispatch['lasturls'] = function() {
-        logsearch.lasturls(function(err, log) {
+    dispatch.lasturls = function() {
+        search.lasturls(to, function(err, log) {
                 if (typeof log === 'string') {
                     var logarr = log.split("\n");
                     for (var i=0; i<logarr.length; i++) {
@@ -217,7 +217,7 @@ IrcBot.prototype.dispatchCommand = function(nick, command, argstr) {
 /*
 ** Disconnects the IRC Client
 */
-function close(message) {
+IrcBot.prototype.close = function(message) {
     this.client.disconnect(message);
 }
 

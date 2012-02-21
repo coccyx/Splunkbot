@@ -1,14 +1,8 @@
 Things to do:
-
-* Allow overridable configs
-  * In the config direction we'll have a different named config that overrides the default.json file
-  * index.js will allow a command line parameter to pick the config
   
 * Implement IRC command interface
   * seen: Splunk search for the last time we've seen the nick mentioned.  Print to IRC and provide link to a web interface that shows their last few conversations
     * need to make sure we search based on the channel !seen comes in on, not allowed in private messages
-  * search: Provide link to references of words in conversation
-  * lasturls: Provide a list of the last X urls to be pasted in the channel
   * lastkicks: Provide a list of the last X kicks with reasons
   
 

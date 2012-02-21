@@ -1,0 +1,46 @@
+script
+  var urlcount = #{urlcount};
+  var channel = "#{channel}";
+.row
+  .span12
+    .page-header
+      .row
+        h1.span5
+          | Last &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; URLs on
+        - var escapedchannel = ''
+        div(style='margin-left: -307px;').btn-group.span2
+          - escapedchannel = encodeURIComponent(channel);
+          a(href='/urls/#{urlcount}/#{escapedchannel}').btn.btn-success #{urlcount}
+          - if (counts.length > 1)
+            a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
+              span.caret
+            ul(id='countmenu').dropdown-menu
+              - for(var i=0;i<counts.length;i++)
+                li
+                  a(href='/urls/#{counts[i]}/#{escapedchannel}') #{counts[i]}
+        div(style='margin-left: -105px;').btn-group.span2
+          a(href='/urls/#{urlcount}/#{escapedchannel}',id='channelbutton').btn.btn-success #{channel}
+          - if (channels.length > 1)
+            a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
+              span.caret
+            ul(id='channelmenu').dropdown-menu
+              - for(var i=0;i<channels.length;i++)
+                - escapedchannel = encodeURIComponent(channels[i]);
+                li
+                  a(href='/urls/#{urlcount}/#{escapedchannel}',id='channel_#{i}') #{channels[i]}
+    div(id='error').alert.alert-block.alert-error.fade.in.hide
+      a(data-dismiss='alert',href='#').close &times;
+      h4.alert-heading Fail!
+      p(id='errortext').
+        Will be set by javascript
+    table.table.table-striped.table-bordered
+      thead
+        tr
+          th
+          th(style='width: 650px;') URL
+          th By
+          th At
+      tbody(id='urlstablebody')
+        tr
+          td(colspan=4)
+            div.center(id='spinner', style="height: 100px;")

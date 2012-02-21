@@ -1,0 +1,58 @@
+- var config_colors_script = 'var config_colors = '+JSON.stringify(colors)
+script
+  !{config_colors_script}
+  
+.row
+  .span12
+    .page-header
+      .row
+        h1.span9 Search results for 
+          - if (typeof time === 'undefined')
+            "<span class="grey">#{search}</span>"
+          - else
+            "<span class="grey">#{timestr}</span>"
+            | on <span class="grey">#{channel}</span>
+        div.pull-right
+          - if (typeof time === 'undefined')
+            div.btn-group
+              - var querystring = "";
+              - if (typeof search !== 'undefined')
+                - querystring += 'q='+encodeURIComponent(search)+'&'
+              - var link = '<a class="btn btn-success" href="/search?'+querystring+'count='+count+'">'+count+'</a>'
+              !{link}
+              - if (counts.length > 1)
+                a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
+                  span.caret
+                ul.dropdown-menu
+                  - for(var i=0;i<counts.length;i++)
+                    li
+                      - link = '<a href="/search?'+querystring+'count='+counts[i]+'">'+counts[i]+'</a>'
+                      !{link}
+          - else if (typeof time !== 'undefined')
+            div.btn-group
+              - var querystring = "";
+              - if (typeof channel !== 'undefined')
+                - querystring += 'channel='+encodeURIComponent(channel)+'&'
+              - if (typeof time !== 'undefined')
+                - querystring += 'time='+time+'&'
+              - if (typeof highlight !== 'undefined')
+                - querystring += 'highlight='+encodeURIComponent(highlight)+'&'
+              - var timeidx = 0;
+              - for (var i=0; i<times.length; i++)
+                - if (timewindow == times[i][1])
+                  - timeidx = i
+              - var link = '<a class="btn btn-success" href="/search?'+querystring+'timewindow='+times[timeidx][1]+'">'+times[timeidx][0]+'</a>'
+              !{link}
+              - if (times.length > 1)
+                a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
+                  span.caret
+                ul.dropdown-menu
+                  - for(var i=0;i<times.length;i++)
+                    li
+                      - link = '<a href="/search?'+querystring+'timewindow='+times[i][1]+'">'+times[i][0]+'</a>'
+                      !{link}
+    - if (typeof time === 'undefined')
+      p Click on a time to see the full log from that channel during that time
+    div(id='logbox').logbox
+      table
+        tbody(id='logboxtablebody')

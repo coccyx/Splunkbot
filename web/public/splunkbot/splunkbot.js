@@ -329,9 +329,9 @@ Splunkbot.prototype.rtsearch = function(searchstr, callback) {
                 
                 // Since search will never be done, register an unload event which will close the search
                 // if the window is closed
-                // $(window).unload(function() {
-                //     job.cancel(done);
-                // });
+                $(window).unload(function() {
+                    job.cancel(done);
+                });
                 
                 Async.whilst(
                     // Loop for N times

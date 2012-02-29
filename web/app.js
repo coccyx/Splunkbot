@@ -8,7 +8,8 @@ var express = require('express')
   , CONFIG = require('config').web
   , search = require('../search')
   , irclog = require('../irclog')
-  , pagevars = { };
+  , pagevars = { }
+  , request = require('request');
 
 var app = module.exports = express.createServer();
 
@@ -93,6 +94,70 @@ app.get('/search', function(req, res, next) {
     pagevars.colors = CONFIG.colors;
     res.render('search', pagevars);
 });
+
+app.all('/proxy/*', function (req, res) {
+    // Copied largely from Splunk SDK code
+    
+    var error = {d: { __messages: [{ type: "ERROR", text: "Proxy Error", code: "PROXY"}] }};
+    
+    var writeError = function() {
+        res.writeHead(500, {});
+        res.write(JSON.stringify(error));
+        res.end();
+    };
+    
+    try {      
+        var bodyarr = [];
+        for (var key in req.body) {
+            bodyarr.push(encodeURIComponent(key) + "=" + encodeURIComponent(req.body[key]));
+        }
+        var body = bodyarr.join("&");
+        var destination = req.headers["X-ProxyDestination".toLowerCase()];
+    
+        var options = {
+            url: destination,
+            method: req.method,
+            headers: {
+                "Content-Length": req.headers["content-length"],
+                "Content-Type": req.headers["content-type"],
+                "Authorization": req.headers["authorization"],
+            },
+            body: body,
+            jar: false
+        };
+        
+        // console.log("Proxy Options: ", options);
+        
+        
+        try {
+            // console.log("Making Proxy request");
+            request(options, function(err, response, data) {
+                // console.log("Request came back.");
+                try {
+                    var statusCode = (response ? response.statusCode : 500) || 500;
+                    var headers = (response ? response.headers : {}) || {};
+                    res.writeHead(statusCode, headers);
+                    res.write(data || JSON.stringify(err));
+                    res.end();
+                    // console.log("Proxy response: ", data || JSON.stringify(err))
+                }
+                catch (ex) {
+                    // console.log("Caught exception: ", ex)
+                    writeError();
+                }
+            });
+        }
+        catch (ex) {
+            // console.log("Caught exception: ", ex)
+            writeError();
+        }
+    }
+    catch (ex) {
+        // console.log("Caught exception: ", ex)
+        writeError();
+    }
+});  
+
 
 app.listen(CONFIG.port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

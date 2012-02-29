@@ -7,7 +7,8 @@ Splunkbot = function() {
     Async = Splunk.Async;
     utils = Splunk.Utils;
     $.getJSON('/splunkcreds.json', function(data) {
-        splunkbot.service = new Splunk.Client.Service(undefined, data);
+        var http = new Splunk.ProxyHttp("/proxy");
+        splunkbot.service = new Splunk.Client.Service(http, data);
         $(document).trigger('creds_loaded');
     });
     splunkbot.nicks = { };

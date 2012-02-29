@@ -181,6 +181,9 @@ IrcBot.prototype.addListeners = function() {
         ircBot.client.send("NAMES", channel);
     });
     
+    // Ignore client errors
+    this.client.addListener("error", function (message) { });
+    
     // Every minute, send ourselves a PING
     setInterval(function() {
             ircBot.client.say(ircBot.config.nick, "\u0001PING "+Math.round(new Date().getTime()/1000,0)+"\u0001");

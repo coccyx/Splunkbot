@@ -21,11 +21,18 @@ IrcBot.prototype.open = function() {
     splunklog.log(util.format("Connecting to IRC.  ircserver=%s, ircnick=%s, ircconfig=%j", 
                     this.config.server, this.config.nick, this.config));
     var ircBot = this;
-    this.client.connect(ircBot.config.retryCount, function() {
-        splunklog.log(util.format("Connected.  ircserver=%s, ircnick=%s", ircBot.config.server, ircBot.config.nick));
-        
-        ircBot.addListeners();
-    });
+    // Autoreconnect if we time out or get another error
+    try {
+        ircBot.client.connect(ircBot.config.retryCount, function() {
+            splunklog.log(util.format("Connected.  ircserver=%s, ircnick=%s", ircBot.config.server, ircBot.config.nick));
+
+            ircBot.addListeners();
+        });
+    } catch (ex) {
+        console.log("Caught exception attempting to connect: ", ex);
+        console.log("Reconnecting in two seconds.");
+        setTimeout(function() { ircBot.open() }, 2000);
+    }
 }
 
 /*

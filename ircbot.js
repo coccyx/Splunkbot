@@ -188,7 +188,7 @@ IrcBot.prototype.dispatchCommand = function(nick, command, argstr, to) {
     var ircBot = this;
     var dispatch = { }
     dispatch.live = function() {
-        ircBot.client.say(to, nick+': Stats can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
+        ircBot.client.say(to, nick+': Live view of '+to+' can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
                                 +'/live/'+encodeURIComponent(to));
     }
     dispatch.stats = function() {

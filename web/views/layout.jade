@@ -46,7 +46,7 @@ html
               - else
                 li
                   a(href='/live') Live View
-            - var placeholder = search || 'Search'
+            - var placeholder = typeof search === 'undefined' ? 'Search' : search
             form.navbar-search.pull-left(action='/search')
               input(type='text', placeholder='#{placeholder}', name='q').search-query.span2
     .container

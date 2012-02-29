@@ -73,6 +73,7 @@ app.get('/live/:channel?', function(req, res, next) {
     pagevars.channels = CONFIG.channels;
     pagevars.channel = req.params.channel || pagevars.channels[0];
     pagevars.search = 'Search';
+    pagevars.colors = CONFIG.colors;
     res.render('live', pagevars);
 });
 

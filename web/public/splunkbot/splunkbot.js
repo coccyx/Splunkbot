@@ -318,13 +318,13 @@ Splunkbot.prototype.rtsearch = function(searchstr, callback) {
             // The search is never going to be done, so we simply poll it every second to get
             // more results
             function(job, done) {
-                var MAX_COUNT = 5;
+                var MAX_COUNT = 100;
                 var count = 0;
             
                 Async.whilst(
                     // Loop for N times
-                    //function() { return MAX_COUNT > count; },
-                    function() { true; },
+                    function() { return MAX_COUNT > count; },
+                    //function() { true; },
                     // Every second, ask for preview results
                     function(iterationDone) {
                         Async.sleep(1000, function() {
@@ -463,7 +463,7 @@ Splunkbot.prototype.logsearch = function(usersearch, count, channel, time, timew
 Splunkbot.prototype.livesearch = function(channel) {
     var splunkbot = this
       , searchstr = "search `irclogs` | search to="+channel+" (action=join OR action=part OR action=quit "
-                    +"OR action=topic OR action=nick OR action=message OR action=notice) | reverse | "
+                    +"OR action=topic OR action=nick OR action=message OR action=notice)  | "
                     +"fields _raw, _time, host, index, source, sourcetype, action, reason, channel, "
                     +"prettynick, names, oldnick, newnick, nick, server, text, to, topic";
     
@@ -508,6 +508,19 @@ $(document).ready(function() {
 ** server has come back
 */
 $(document).bind('creds_loaded', function() {
+    // Create for Spinner
+    var opts = {
+      lines: 12, // The number of lines to draw
+      length: 7, // The length of each line
+      width: 4, // The line thickness
+      radius: 10, // The radius of the inner circle
+      color: '#000', // #rgb or #rrggbb
+      speed: 1, // Rounds per second
+      trail: 60, // Afterglow percentage
+      shadow: false, // Whether to render a shadow
+      hwaccel: false // Whether to use hardware acceleration
+    };
+    
     // Example of how to bind to a pulldown
     //$("#countmenu > li").bind('click', function(e) { alert (e.target) } );
     
@@ -515,17 +528,6 @@ $(document).bind('creds_loaded', function() {
     var page = window.location.pathname.split('/')[1];
     if (page == 'urls') {
         // Create the spinner
-        var opts = {
-          lines: 12, // The number of lines to draw
-          length: 7, // The length of each line
-          width: 4, // The line thickness
-          radius: 10, // The radius of the inner circle
-          color: '#000', // #rgb or #rrggbb
-          speed: 1, // Rounds per second
-          trail: 60, // Afterglow percentage
-          shadow: false, // Whether to render a shadow
-          hwaccel: false // Whether to use hardware acceleration
-        };
         var target = $("#spinner")[0];
         spinner = new Spinner(opts).spin(target);
 
@@ -533,17 +535,6 @@ $(document).bind('creds_loaded', function() {
         splunkbot.lasturls(urlcount, channel);
     } else if (page == 'search') {
         // Create the spinner
-        var opts = {
-          lines: 12, // The number of lines to draw
-          length: 7, // The length of each line
-          width: 4, // The line thickness
-          radius: 10, // The radius of the inner circle
-          color: '#FFF', // #rgb or #rrggbb
-          speed: 1, // Rounds per second
-          trail: 60, // Afterglow percentage
-          shadow: false, // Whether to render a shadow
-          hwaccel: false // Whether to use hardware acceleration
-        };
         var target = $("#logbox")[0];
         spinner = new Spinner(opts).spin(target);
 
@@ -552,17 +543,6 @@ $(document).bind('creds_loaded', function() {
                             urlParams.time, urlParams.timewindow);
     } else if (page == 'live') {
         // Create the spinner
-        var opts = {
-          lines: 12, // The number of lines to draw
-          length: 7, // The length of each line
-          width: 4, // The line thickness
-          radius: 10, // The radius of the inner circle
-          color: '#FFF', // #rgb or #rrggbb
-          speed: 1, // Rounds per second
-          trail: 60, // Afterglow percentage
-          shadow: false, // Whether to render a shadow
-          hwaccel: false // Whether to use hardware acceleration
-        };
         var target = $("#logbox")[0];
         spinner = new Spinner(opts).spin(target);
 

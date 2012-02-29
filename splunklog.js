@@ -64,6 +64,7 @@ function open(logout) {
                         flushqueue();
                     
                         clients[idx].on('end', function() { disconnectedCallback(idx) });
+                        clients[idx].on('error', function() { disconnectedCallback(idx) });
                     }
                     function disconnectedCallback(idx) {
                         console.log("Remote side disconnected.  Reconnecting to %s:%s", SYSLOGCONFIG[idx].syslog_host, SYSLOGCONFIG[idx].syslog_port);

@@ -12,6 +12,7 @@ Splunkbot = function() {
     });
     splunkbot.nicks = { };
     splunkbot.currentcoloridx = 4;
+    splunkbot.currentliverow = 0;
 }
 
 /***************************************************
@@ -129,6 +130,11 @@ Splunkbot.prototype.makeircline = function(row, fields) {
     dispatch.message = function(result, fields) {
         // Make sure we have a string
         row[fields.indexOf('text')] = row[fields.indexOf('text')] === null ? "" : row[fields.indexOf('text')];
+        // Escape any HTML affecting characters
+        row[fields.indexOf('text')] = row[fields.indexOf('text')].replace(/&/g,'&amp;').                                         
+                                                                    replace(/>/g,'&gt;').                                           
+                                                                    replace(/</g,'&lt;').                                           
+                                                                    replace(/"/g,'&quot;');
         
         if (row[fields.indexOf('text')].substr(0, 7) === '\u0001ACTION') {
             var metext = row[fields.indexOf('text')].substring(7, row[fields.indexOf('text')].length-1);
@@ -186,12 +192,12 @@ Splunkbot.prototype.makeircline = function(row, fields) {
 ** Takes search results object from splunksearch and outputs in an IRC Log format
 */
 
-Splunkbot.prototype.makeirclog = function(results) {
+Splunkbot.prototype.makeirclog = function(results, startrow) {
     var retstr = ''
       , lastdate = '';
     if (results.rows.length > 0) {
         lastdate = this.makedate(results.rows[0][results.fields.indexOf('_time')]);
-        for (var i=0; i < results.rows.length; i++) {
+        for (var i=typeof startrow !== 'undefined' ? startrow : 0; i < results.rows.length; i++) {
             var row = results.rows[i]
               , fields = results.fields
               , date = this.makedate(row[fields.indexOf('_time')]);
@@ -318,9 +324,15 @@ Splunkbot.prototype.rtsearch = function(searchstr, callback) {
             // The search is never going to be done, so we simply poll it every second to get
             // more results
             function(job, done) {
-                var MAX_COUNT = 100;
+                var MAX_COUNT = 10 * 60; // 10 Minutes
                 var count = 0;
-            
+                
+                // Since search will never be done, register an unload event which will close the search
+                // if the window is closed
+                // $(window).unload(function() {
+                //     job.cancel(done);
+                // });
+                
                 Async.whilst(
                     // Loop for N times
                     function() { return MAX_COUNT > count; },
@@ -338,21 +350,21 @@ Splunkbot.prototype.rtsearch = function(searchstr, callback) {
                                     // Up the iteration counter
                                     count++;
                                 
-                                    console.log("========== Iteration " + count + " ==========");
-                                    var sourcetypeIndex = utils.indexOf(results.fields, "sourcetype");
-                                    var countIndex      = utils.indexOf(results.fields, "count");
-                                
-                                    for(var i = 0; i < results.rows.length; i++) {
-                                        var row = results.rows[i];
-                                    
-                                        // This is a hacky "padding" solution
-                                        var stat = ("  " + row[sourcetypeIndex] + "                         ").slice(0, 30);
-                                    
-                                        // Print out the sourcetype and the count of the sourcetype so far
-                                        console.log(stat + row[countIndex]);   
-                                    }
-                                
-                                    console.log("=================================");
+                                    // console.log("========== Iteration " + count + " ==========");
+                                    // var sourcetypeIndex = utils.indexOf(results.fields, "sourcetype");
+                                    // var countIndex      = utils.indexOf(results.fields, "count");
+                                    //                                 
+                                    // for(var i = 0; i < results.rows.length; i++) {
+                                    //     var row = results.rows[i];
+                                    // 
+                                    //     // This is a hacky "padding" solution
+                                    //     var stat = ("  " + row[sourcetypeIndex] + "                         ").slice(0, 30);
+                                    // 
+                                    //     // Print out the sourcetype and the count of the sourcetype so far
+                                    //     console.log(stat + row[countIndex]);   
+                                    // }
+                                    //                                 
+                                    // console.log("=================================");
                                     
                                     // Splunkbot inserted to call callback here when we have results
                                     if (results.rows.length > 0) {
@@ -453,6 +465,8 @@ Splunkbot.prototype.logsearch = function(usersearch, count, channel, time, timew
             // Disable spinner
             spinner.spin();
             $('#logboxtablebody').html(splunkbot.makeirclog(results));
+            console.log('Triggering primed event');
+            $(document).trigger('primed');
         }
     });
 }
@@ -465,22 +479,37 @@ Splunkbot.prototype.livesearch = function(channel) {
       , searchstr = "search `irclogs` | search to="+channel+" (action=join OR action=part OR action=quit "
                     +"OR action=topic OR action=nick OR action=message OR action=notice)  | "
                     +"fields _raw, _time, host, index, source, sourcetype, action, reason, channel, "
-                    +"prettynick, names, oldnick, newnick, nick, server, text, to, topic";
+                    +"prettynick, names, oldnick, newnick, nick, server, text, to, topic"
+      , primed    = false;
     
     console.log("Searchstr: ", searchstr);
-    splunkbot.rtsearch(searchstr, function(err, results) {
-        if (err) {
-            $('#errortext').text(err);
-            $('#error').show();
-            return;
-        } else {
-            // Disable spinner
-            spinner.spin();
-            if (typeof results !== 'undefined') {
-                $('#logboxtablebody').html($('#logboxtablebody').html()+splunkbot.makeirclog(results));
+    
+    // Listen for primed event after we've completed the first search to populate the window
+    // When we get it, fire off the realtime search.
+    $(document).bind('primed', function () {
+        console.log('Primed.  Kicking off realtime search.');
+        
+        var logbox = $("#logbox");
+        logbox.animate({ scrollTop: logbox.prop("scrollHeight") - logbox.height() }, 1000);
+        
+        splunkbot.rtsearch(searchstr, function(err, results) {
+            if (err) {
+                $('#errortext').text(err);
+                $('#error').show();
+                return;
+            } else {
+                if (typeof results !== 'undefined') {
+                    if (results.rows.length > splunkbot.currentliverow) {
+                        $('#logboxtablebody').html($('#logboxtablebody').html()
+                                                    +splunkbot.makeirclog(results, splunkbot.currentliverow++));
+                        logbox.animate({ scrollTop: logbox.prop("scrollHeight") - logbox.height() }, 500);
+                    }
+                }
             }
-        }
+        });
     });
+    
+    splunkbot.logsearch("", undefined, channel, new Date().getTime(), (30 * 60000));
 }
 
 
@@ -514,7 +543,7 @@ $(document).bind('creds_loaded', function() {
       length: 7, // The length of each line
       width: 4, // The line thickness
       radius: 10, // The radius of the inner circle
-      color: '#000', // #rgb or #rrggbb
+      color: '#FFF', // #rgb or #rrggbb
       speed: 1, // Rounds per second
       trail: 60, // Afterglow percentage
       shadow: false, // Whether to render a shadow
@@ -529,6 +558,7 @@ $(document).bind('creds_loaded', function() {
     if (page == 'urls') {
         // Create the spinner
         var target = $("#spinner")[0];
+        opts.color='#000';
         spinner = new Spinner(opts).spin(target);
 
         // Search splunk and output the results to the table

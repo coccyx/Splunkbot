@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>ircbot.js</string>
+	<string>web/public/splunkbot/splunkbot.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -40,21 +40,19 @@
 			<key>filename</key>
 			<string>ircbot.js</string>
 			<key>lastUsed</key>
-			<date>2012-02-18T23:12:30Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2012-02-29T06:40:08Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>index.js</string>
 			<key>lastUsed</key>
-			<date>2012-02-18T22:19:59Z</date>
+			<date>2012-02-29T06:29:16Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>splunklog.js</string>
 			<key>lastUsed</key>
-			<date>2012-02-18T22:17:29Z</date>
+			<date>2012-02-29T04:44:38Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -72,7 +70,7 @@
 			<key>filename</key>
 			<string>search.js</string>
 			<key>lastUsed</key>
-			<date>2012-02-18T23:12:29Z</date>
+			<date>2012-02-28T05:50:03Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -84,7 +82,7 @@
 			<key>filename</key>
 			<string>splunk.js</string>
 			<key>lastUsed</key>
-			<date>2012-02-18T23:12:30Z</date>
+			<date>2012-02-28T05:50:25Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -102,51 +100,67 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>16</integer>
 				<key>line</key>
-				<integer>14</integer>
+				<integer>38</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>16</integer>
 		</dict>
 		<key>config/development.json</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>46</integer>
+				<integer>25</integer>
 				<key>line</key>
-				<integer>21</integer>
+				<integer>51</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>16</integer>
 		</dict>
 		<key>config/web.json</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>112</integer>
 				<key>line</key>
-				<integer>5</integer>
+				<integer>12</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>112</integer>
+				<key>line</key>
+				<integer>12</integer>
+			</dict>
 		</dict>
 		<key>index.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>25</integer>
+				<integer>38</integer>
 				<key>line</key>
-				<integer>3</integer>
+				<integer>4</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -158,23 +172,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>32</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>188</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>search.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>46</integer>
+				<integer>139</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -211,66 +211,110 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<key>splunklog.js</key>
+		<key>web/app.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>29</integer>
+				<key>line</key>
+				<integer>57</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>web/public/spin.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>49</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>44</integer>
+			<integer>0</integer>
 		</dict>
-		<key>web/app.js</key>
+		<key>web/public/splunkbot/splunkbot.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>42</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>326</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>316</integer>
+		</dict>
+		<key>web/views/layout.jade</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>81</integer>
+				<key>line</key>
+				<integer>48</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>31</integer>
+		</dict>
+		<key>web/views/live.jade</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>43</integer>
+				<key>line</key>
+				<integer>18</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>4</integer>
+			<integer>0</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>25</integer>
+				<integer>37</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>18</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>43</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>18</integer>
 			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>index.js</string>
-		<string>ircbot.js</string>
 		<string>splunk.js</string>
-		<string>search.js</string>
+		<string>web/app.js</string>
+		<string>web/public/spin.js</string>
+		<string>web/public/splunkbot/splunkbot.js</string>
+		<string>config/web.json</string>
+		<string>index.js</string>
 		<string>config/development.json</string>
 		<string>config/default.json</string>
-		<string>config/web.json</string>
-		<string>web/app.js</string>
-		<string>splunklog.js</string>
+		<string>ircbot.js</string>
+		<string>web/views/layout.jade</string>
+		<string>web/views/live.jade</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{446, 85}, {918, 751}}</string>
+	<string>{{460, 91}, {918, 751}}</string>
 </dict>
 </plist>

@@ -2,13 +2,14 @@ var irc = require('irc');
 var util = require('util');
 var search = require('./search');
 var splunklog = require('./splunklog');
-//var web = require('./web/app');
+var web = require('./web/app');
 
 /*
 ** Constructor.  Create state in the object
 */
-IrcBot = function(config) {
+IrcBot = function(config, webconfig) {
     this.config = config;
+    this.webconfig = webconfig;
     this.client = new irc.Client(this.config.server, this.config.nick, this.config);
     this.names = { };
 }
@@ -186,28 +187,39 @@ IrcBot.prototype.addListeners = function() {
 IrcBot.prototype.dispatchCommand = function(nick, command, argstr, to) {
     var ircBot = this;
     var dispatch = { }
-    dispatch.seen = function() {
-
+    dispatch.live = function() {
+        ircBot.client.say(to, nick+': Stats can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
+                                +'/live/'+encodeURIComponent(to));
+    }
+    dispatch.stats = function() {
+        ircBot.client.say(to, nick+': Stats can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
+                                +'/stats/'+encodeURIComponent(to));
     }
     dispatch.search = function() {
-        search.logsearch(argstr, function(err, log) {
-                if (typeof log === 'string') {
-                    var logarr = log.split("\n");
-                    for (var i=0; i<logarr.length; i++) {
-                        ircBot.client.say(nick, logarr[i]);
-                    }
-                }
-            });
+        // 2.28 CS - Replacing IRC functionality with link to web interface
+        // search.logsearch(argstr, function(err, log) {
+        //                 if (typeof log === 'string') {
+        //                     var logarr = log.split("\n");
+        //                     for (var i=0; i<logarr.length; i++) {
+        //                         ircBot.client.say(nick, logarr[i]);
+        //                     }
+        //                 }
+        //             });
+        ircBot.client.say(to, nick+': Results can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
+                                +'/search?q='+encodeURIComponent(argstr));
     }
     dispatch.lasturls = function() {
-        search.lasturls(to, function(err, log) {
-                if (typeof log === 'string') {
-                    var logarr = log.split("\n");
-                    for (var i=0; i<logarr.length; i++) {
-                        ircBot.client.say(nick, logarr[i]);
-                    }
-                }
-            }, argstr);
+        // 2.28 CS - Replacing IRC functionality with link to web interface
+        // search.lasturls(to, function(err, log) {
+        //                 if (typeof log === 'string') {
+        //                     var logarr = log.split("\n");
+        //                     for (var i=0; i<logarr.length; i++) {
+        //                         ircBot.client.say(nick, logarr[i]);
+        //                     }
+        //                 }
+        //             }, argstr);
+        ircBot.client.say(to, nick+': Last 10 URLs can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
+                                +'/urls/10/'+encodeURIComponent(to));
     }
     if (typeof dispatch[command] === 'function') {
         dispatch[command]();

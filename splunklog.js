@@ -1,4 +1,6 @@
 SYSLOGCONFIG = require('config').syslog;
+TIMEOUTCONFIG = require('config').reconnect_timeout;
+TIMEOUTCONFIG = typeof TIMEOUTCONFIG === 'number' ? TIMEOUTCONFIG : 2000;
 var util = require('util');
 var net = require('net');
 var connectedlist = [ ];
@@ -56,20 +58,20 @@ function open(logout) {
             if (!connectedlist[i]) {
                 function fixLoop(idx) {
                     connectinglist[idx] = true;
+                    clients[idx].on('end', function() { disconnectedCallback(idx) });
+                    clients[idx].on('error', function() { disconnectedCallback(idx) });
                     console.log("Connecting to %s:%s", SYSLOGCONFIG[i].syslog_host, SYSLOGCONFIG[i].syslog_port);
                     function connectedCallback(idx) {
                         console.log("Connected to %s:%s", SYSLOGCONFIG[idx].syslog_host, SYSLOGCONFIG[idx].syslog_port);
                         connectedlist[idx] = true;
                         connectinglist[idx] = false;
                         flushqueue();
-                    
-                        clients[idx].on('end', function() { disconnectedCallback(idx) });
-                        clients[idx].on('error', function() { disconnectedCallback(idx) });
                     }
                     function disconnectedCallback(idx) {
                         console.log("Remote side disconnected.  Reconnecting to %s:%s", SYSLOGCONFIG[idx].syslog_host, SYSLOGCONFIG[idx].syslog_port);
                         connectedlist[idx] = false;
-                        open();
+                        
+                        setTimeout(TIMEOUTCONFIG, function () { open(); });
                     }
                     clients[i] = net.createConnection(SYSLOGCONFIG[idx].syslog_port, SYSLOGCONFIG[idx].syslog_host, 
                                                         function() { connectedCallback(idx) });

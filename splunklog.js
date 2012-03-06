@@ -58,8 +58,6 @@ function open(logout) {
             if (!connectedlist[i]) {
                 function fixLoop(idx) {
                     connectinglist[idx] = true;
-                    clients[idx].on('end', function() { disconnectedCallback(idx) });
-                    clients[idx].on('error', function() { disconnectedCallback(idx) });
                     console.log("Connecting to %s:%s", SYSLOGCONFIG[i].syslog_host, SYSLOGCONFIG[i].syslog_port);
                     function connectedCallback(idx) {
                         console.log("Connected to %s:%s", SYSLOGCONFIG[idx].syslog_host, SYSLOGCONFIG[idx].syslog_port);
@@ -73,8 +71,10 @@ function open(logout) {
                         
                         setTimeout(TIMEOUTCONFIG, function () { open(); });
                     }
-                    clients[i] = net.createConnection(SYSLOGCONFIG[idx].syslog_port, SYSLOGCONFIG[idx].syslog_host, 
+                    clients[idx] = net.createConnection(SYSLOGCONFIG[idx].syslog_port, SYSLOGCONFIG[idx].syslog_host, 
                                                         function() { connectedCallback(idx) });
+                    clients[idx].on('end', function() { disconnectedCallback(idx) });
+                    clients[idx].on('error', function() { disconnectedCallback(idx) });
                 }
                 fixLoop(i);
             }

@@ -11,20 +11,20 @@ var clients = [ ];
 var queue = [ ];
 
 function connecting() {
-    var ret = false;
+    var ret = true;
     for (var i=0; i < SYSLOGCONFIG.length; i++) {
-        if (connectinglist[i]) {
-            ret = true;
+        if (!connectinglist[i]) {
+            ret = false;
         }
     }
     return ret;
 }
 
 function connected() {
-    var ret = false;
+    var ret = true;
     for (var i=0; i < SYSLOGCONFIG.length; i++) {
-        if (connectedlist[i]) {
-            ret = true;
+        if (!connectedlist[i]) {
+            ret = false;
         }
     }
     return ret;

@@ -69,7 +69,10 @@ function open(logout) {
                         console.log("Remote side disconnected.  Reconnecting to %s:%s", SYSLOGCONFIG[idx].syslog_host, SYSLOGCONFIG[idx].syslog_port);
                         connectedlist[idx] = false;
                         
-                        setTimeout(TIMEOUTCONFIG, function () { open(); });
+                        if (!connecting()) {
+                            connectinglist[idx] = true;
+                            setTimeout(TIMEOUTCONFIG, function () { open(); });
+                        }
                     }
                     clients[idx] = net.createConnection(SYSLOGCONFIG[idx].syslog_port, SYSLOGCONFIG[idx].syslog_host, 
                                                         function() { connectedCallback(idx) });

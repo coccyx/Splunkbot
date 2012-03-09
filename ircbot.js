@@ -1,7 +1,7 @@
 var irc = require('irc');
 var util = require('util');
 var search = require('./search');
-var splunklog = require('./splunklog');
+var log = require('./log');
 var web = require('./web/app');
 
 /*
@@ -11,6 +11,7 @@ IrcBot = function(config, webconfig) {
     this.config = config;
     this.webconfig = webconfig;
     this.client = new irc.Client(this.config.server, this.config.nick, this.config);
+    this.logger = new Log();
     this.names = { };
 }
 
@@ -18,13 +19,13 @@ IrcBot = function(config, webconfig) {
 ** Opens a connection to the IRC server
 */
 IrcBot.prototype.open = function() {
-    splunklog.log(util.format("Connecting to IRC.  ircserver=%s, ircnick=%s, ircconfig=%j", 
-                    this.config.server, this.config.nick, this.config));
     var ircBot = this;
+    ircBot.logger.send(util.format("Connecting to IRC.  ircserver=%s, ircnick=%s, ircconfig=%j", 
+                    this.config.server, this.config.nick, this.config));
     // Autoreconnect if we time out or get another error
     try {
         ircBot.client.connect(ircBot.config.retryCount, function() {
-            splunklog.log(util.format("Connected.  ircserver=%s, ircnick=%s", ircBot.config.server, ircBot.config.nick));
+            ircBot.logger.send(util.format("Connected.  ircserver=%s, ircnick=%s", ircBot.config.server, ircBot.config.nick));
 
             ircBot.addListeners();
         });
@@ -42,7 +43,7 @@ IrcBot.prototype.addListeners = function() {
     var ircBot = this;
     this.client.addListener("registered", function(message) {
         var strout = 'server='+this.opt.server+' action=registered nick='+this.opt.nick;
-        splunklog.log(strout);
+        ircBot.logger.send(strout);
     });
 
     this.client.addListener("names", function(channel, nicks) {
@@ -54,50 +55,38 @@ IrcBot.prototype.addListeners = function() {
             strout += nicks[nick]+nick+' ';
         }
         strout = strout+'"';
-        splunklog.log(strout);
+        ircBot.logger.send(strout);
     });
 
     this.client.addListener("topic", function(channel, topic, nick, message) {
         var objout = { server: this.opt.server, action: 'topic', nick: nick, prettynick: ircBot.prettynick(channel, nick), topic: topic };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=topic nick='+nick+ircBot.prettynick(channel, nick)+' topic="'+topic+'"';
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("join", function(channel, nick, message) {
         var objout = { server: this.opt.server, action: 'join', nick: nick, channel: channel };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=join nick='+nick+' channel='+channel;
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("part", function(channel, nick, reason, message) {
         var objout = { server: this.opt.server, action: 'part', nick: nick, channel: channel, reason: reason };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=part nick='+nick+' channel='+channel+reason?' reason="'+reason+'"':"";
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("quit", function(nick, reason, channels, message) {
         var objout = { server: this.opt.server, action: 'quit', nick: nick, channels: channels, reason: reason };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=quit nick='+nick+' reason="'+reason+'"';
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("kick", function(channel, nick, by, reason, message) {
         var objout = { server: this.opt.server, action: 'kick', nick: nick, channel: channel, kicked_by: by,
                         reason: reason };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=kick nick='+nick+ircBot.prettynick(channel, nick)+' kicked_by='+by+' reason="'+reason+'"';
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("kill", function(nick, reason, channels, message) {
         var objout = { server: this.opt.server, action: 'kill', nick: nick, channels: channels, message: message };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=kill nick='+nick+' reason="'+reason+'"';
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("message", function(nick, to, text, message) {
@@ -132,39 +121,29 @@ IrcBot.prototype.addListeners = function() {
         }
         var objout = { server: this.opt.server, action: action, nick: nick, prettynick: ircBot.prettynick(to, nick),
                         to: to, text: text };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action='+action+' nick='+nick+ircBot.prettynick(to, nick)+' to='+to+' text="'+text.replace(/"/g, '\\"')+'"';
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("notice", function(nick, to, text, message) {
         var objout = { server: this.opt.server, action: 'notice', nick: nick, prettynick: ircBot.prettynick(to, nick),
                         to: to, text: text };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=notice nick='+nick+ircBot.prettynick(to, nick)+' to='+to+' text="'+text.replace(/"/g, '\\"')+'"';
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("nick", function(oldnick, newnick, channels, message) {
         var objout = { server: this.opt.server, action: 'nick', oldnick: oldnick, newnick: newnick, channels: channels };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=nick oldnick='+oldnick+' newnick='+newnick;
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("invite", function(channel, nick, message) {
         var objout = { server: this.opt.server, action: 'invite', nick: nick, channel: channel };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=invite channel='+channel+' nick='+nick;
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
     });
 
     this.client.addListener("+mode", function(channel, by, mode, argument, message) {
         var objout = { server: this.opt.server, action: '+mode', channel: channel, by: by,
                         mode: mode, argument: argument };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=addmode channel='+channel+' by='+by+' mode='+mode+' argument="'+argument.replace(/"/g, '\\"')+'"';
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
         
         // Update state of the names cache when modes change
         this.client.send("NAMES", channel);
@@ -173,9 +152,7 @@ IrcBot.prototype.addListeners = function() {
     this.client.addListener("-mode", function(channel, by, mode, argument, message) {
         var objout = { server: this.opt.server, action: '-mode', channel: channel, by: by,
                         mode: mode, argument: argument };
-        splunklog.log(objout);
-        //var strout = 'server='+this.opt.server+' action=delmode channel='+channel+' by='+by+' mode='+mode+' argument="'+argument.replace(/"/g, '\\"')+'"';
-        //splunklog.log(strout);
+        ircBot.logger.send(objout);
         
         // Update state of the names cache when modes change
         ircBot.client.send("NAMES", channel);
@@ -248,10 +225,8 @@ IrcBot.prototype.close = function(message) {
 ** Will return nick, +nick, @nick, etc.
 */
 IrcBot.prototype.prettynick = function (channel, nick) {
-    //console.log("channel: %s nick: %s", channel, nick);
     var prefix = "";
     if (typeof this.names[channel] !== 'undefined') {
-        //console.log("prettynick: %s", names[channel][nick]);
         prefix = this.names[channel][nick];
     }
     return prefix+nick;

@@ -1,6 +1,6 @@
 SPLUNKSEARCHCONFIG = require('config').splunk;
 var util = require('util');
-var Splunk = require('splunk-sdk-javascript').Splunk;
+var Splunk = require('splunk-sdk').Splunk;
 var Async  = Splunk.Async;
 
 /*

@@ -1,0 +1,33 @@
+{
+    "name" : "splunkbot",
+    "version" : "0.1.0",
+    "description" : "An IRC Bot which logs traffic from configured channels to Splunk and provides a web interface for easily searching and extracting data from IRC",
+    "homepage": "http://github.com/coccyx/Splunkbot",
+    "main" : "index.js",
+    "directories" : {
+        "example" : "examples",
+        "lib" : "lib",
+        "test" : "tests"
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : "http://github.com/coccyx/Splunkbot.git"
+    },
+    "keywords" : [
+        "splunk",
+        "irc"
+    ],
+    "dependencies" : {
+        "splunk-sdk" : "0.1.0",
+        "config" : "0.4.10",
+        "irc": "0.3.3",
+        "request": "2.2.x"
+    },
+    "author" : {
+        "name" : "Clint Sharp",
+        "email" : "clint@typhoon.org",
+        "url" : "http://clintsharp.com/"
+    },
+    "license" : "Apache 2.0",
+    "engine" : { "node" : ">=0.4.9" }
+}

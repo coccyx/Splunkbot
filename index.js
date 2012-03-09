@@ -1,14 +1,14 @@
 var util = require('util');
-var splunklog = require('./splunklog');
+var log = require('./log');
 var ircbot = require('./ircbot');
 var ircconfig = require('config').irc;
 var webconfig = require('config').web;
 var bots = [ ];
 
+var logger = new Log();
 console.log("Splunkbot started");
 
-splunklog.open();
-splunklog.log("Splunkbot launching");
+logger.send("Splunkbot launching");
 
 for (var i=0; i < ircconfig.length; i++) {
     bots[i] = new ircbot.IrcBot(ircconfig[i], webconfig);

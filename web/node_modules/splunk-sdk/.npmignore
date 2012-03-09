@@ -1,0 +1,17 @@
+*node_modules
+*build/
+.git
+tests/html/*
+*.out
+*DS_Store
+*.sublime-*
+*.pyc
+.idea/*
+npm-debug.log
+server.py
+.buildcache
+v8.log
+cover_html
+.coverage_data
+.coverignore
+*.swp

@@ -21,7 +21,8 @@
         "splunk-sdk" : "0.1.0",
         "config" : "0.4.10",
         "irc": "0.3.3",
-        "request": "2.2.x"
+        "request": "2.2.x",
+        "loggly": "0.3.11"
     },
     "author" : {
         "name" : "Clint Sharp",

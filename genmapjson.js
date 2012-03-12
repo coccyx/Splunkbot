@@ -8,22 +8,18 @@ function writeResults(results) {
     var rows = results.rows;
     var fields = results.fields;
     var types = [ 'circle', 'star', 'triangle' ];
-    var colors = WEBCONFIG.colors;
-    var colorMap = { "white": "#FFFFFF",
-                     "darkred": "#800000",
-                     "red": "#FF0000",
-                     "pink": "#FF00FF",
-                     "teal": "#008000",
-                     "cyan": "#00FFFF",
-                     "green": "#00FF00",
-                     "brightgreen": "#00FF00",
-                     "darkblue": "#000080",
-                     "blue": "#0000FF",
-                     "violet": "#800080",
-                     "darkgrey": "#808080",
-                     "grey": "#c0c0c0",
-                     "darkyellow": "#808000",
-                     "yellow": "#FFFF00" };
+    var colors = [ "#800000", // dark red
+                   "#FF0000", // red
+                   "#FF00FF", // pink
+                   "#008000", // teal
+                   "#00FFFF", // cyan
+                   "#008000", // green
+                   "#00FF00", // bright green
+                   "#000080", // green
+                   "#0000FF", // blue
+                   "#800080", // violet
+                   "#808000", // dark yellow
+                   "#FFFF00" ] // yellow
 
     // console.log(JSON.stringify(results, null, 2));
     
@@ -42,14 +38,14 @@ function writeResults(results) {
             }
             // console.log(util.format("%d currentNick: %s newNick: %s", i, currentNick, rows[i][fields.indexOf('nick')]));
             currentNick = rows[i][fields.indexOf('nick')];
-            color = colors[nickIdx % 16];
+            color = colors[nickIdx % 12];
             type = types[nickIdx % 3];
             adjacenciesIdx = 0;
             json[nickIdx] = { };
             json[nickIdx].id = currentNick;
             json[nickIdx].name = currentNick;
             json[nickIdx].data = { };
-            json[nickIdx].data['$color'] = colorMap[color];
+            json[nickIdx].data['$color'] = color;
             json[nickIdx].data['$type'] = type;
             json[nickIdx].data['$dim'] = 12;
             json[nickIdx].adjacencies = [ ];
@@ -59,7 +55,7 @@ function writeResults(results) {
         json[nickIdx].adjacencies[adjacenciesIdx].nodeFrom = currentNick;
         json[nickIdx].adjacencies[adjacenciesIdx].nodeTo = rows[i][fields.indexOf('connection')];
         json[nickIdx].adjacencies[adjacenciesIdx].data = { };
-        json[nickIdx].adjacencies[adjacenciesIdx].data['$color'] = colorMap[color];
+        json[nickIdx].adjacencies[adjacenciesIdx].data['$color'] = color;
         json[nickIdx].adjacencies[adjacenciesIdx].data['lineWidth'] = 0.5+Math.floor(rows[i][fields.indexOf('count')]/5);
         adjacenciesIdx++;
     }

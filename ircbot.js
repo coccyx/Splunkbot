@@ -210,7 +210,7 @@ IrcBot.prototype.dispatchCommand = function(nick, command, argstr, to) {
     }
     dispatch.map = function () {
         ircBot.client.say(to, nick+': Last 10 URLs can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
-                                +'/map';
+                                +'/map');
     }
     if (typeof dispatch[command] === 'function') {
         dispatch[command]();

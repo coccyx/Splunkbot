@@ -95,6 +95,13 @@ app.get('/search', function(req, res, next) {
     res.render('search', pagevars);
 });
 
+app.get('/map', function(req, res, next) {
+    pagevars.page = 'map';
+    pagevars.search = 'Search';
+    pagevars.colors = CONFIG.colors;
+    res.render('map', pagevars);
+});
+
 app.all('/proxy/*', function (req, res) {
     // Copied largely from Splunk SDK code
     

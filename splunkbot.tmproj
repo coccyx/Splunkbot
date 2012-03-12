@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>splunklog.js</string>
+	<string>config/development.json</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -50,11 +50,7 @@
 		</dict>
 		<dict>
 			<key>filename</key>
-			<string>splunklog.js</string>
-			<key>lastUsed</key>
-			<date>2012-03-06T20:38:59Z</date>
-			<key>selected</key>
-			<true/>
+			<string>deprecated-splunklog.js</string>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -132,7 +128,7 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>30</integer>
+				<integer>24</integer>
 				<key>line</key>
 				<integer>5</integer>
 			</dict>
@@ -155,24 +151,9 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>splunklog.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>12</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>46</integer>
-		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>splunklog.js</string>
 		<string>index.js</string>
 		<string>config/default.json</string>
 		<string>config/development.json</string>

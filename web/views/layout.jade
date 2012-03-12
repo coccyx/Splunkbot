@@ -28,6 +28,12 @@ html
               - else
                 li
                   a(href='/') Home
+              - if (page == 'map')
+                li.active
+                  a(href='/map') Map
+              - else
+                li
+                  a(href='/map') Map
               - if (page == 'stats')
                 li.active
                   a(href='/stats') Stats

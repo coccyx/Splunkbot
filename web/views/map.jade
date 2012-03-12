@@ -1,0 +1,14 @@
+script(src='/jit.js')
+.row
+  .span12
+    .page-header
+      .row
+        h1
+          | Chat Map - Shows which users to which users and at what frequency
+    div(id='error').alert.alert-block.alert-error.fade.in.hide
+      a(data-dismiss='alert',href='#').close &times;
+      h4.alert-heading Fail!
+      p(id='errortext').
+        Will be set by javascript
+    div(id='map',style='width: 1024; height: 600px; background: #0f0f0f')
+      &nbsp;

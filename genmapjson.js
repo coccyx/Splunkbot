@@ -56,7 +56,7 @@ function writeResults(results) {
         json[nickIdx].adjacencies[adjacenciesIdx].nodeTo = rows[i][fields.indexOf('connection')];
         json[nickIdx].adjacencies[adjacenciesIdx].data = { };
         json[nickIdx].adjacencies[adjacenciesIdx].data['$color'] = color;
-        json[nickIdx].adjacencies[adjacenciesIdx].data['lineWidth'] = 0.5+Math.floor(rows[i][fields.indexOf('count')]/5);
+        json[nickIdx].adjacencies[adjacenciesIdx].data['$lineWidth'] = 0.5+Math.floor(rows[i][fields.indexOf('count')]/5);
         adjacenciesIdx++;
     }
     

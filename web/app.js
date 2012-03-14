@@ -66,6 +66,10 @@ app.get('/stats/:channel?', function(req, res, next) {
     pagevars.channels = CONFIG.channels;
     pagevars.channel = req.params.channel || pagevars.channels[0];
     pagevars.search = 'Search';
+    
+    pagevars.time = req.query.time;
+    pagevars.timewindow = req.query.timewindow;    
+    pagevars.times = CONFIG.stats_times;
     res.render('stats', pagevars);
 });
 

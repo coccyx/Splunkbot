@@ -88,6 +88,30 @@
 			<key>lastUsed</key>
 			<date>2012-02-18T23:12:16Z</date>
 		</dict>
+		<dict>
+			<key>filename</key>
+			<string>dev.sh</string>
+			<key>selected</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>genmapjson.js</string>
+			<key>selected</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>log.js</string>
+			<key>selected</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>NOTES.md</string>
+			<key>selected</key>
+			<true/>
+		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
@@ -128,14 +152,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>24</integer>
+				<integer>34</integer>
 				<key>line</key>
-				<integer>5</integer>
+				<integer>464</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>453</integer>
 		</dict>
 		<key>index.js</key>
 		<dict>
@@ -161,6 +185,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{250, 74}, {918, 751}}</string>
+	<string>{{367, 91}, {918, 751}}</string>
 </dict>
 </plist>

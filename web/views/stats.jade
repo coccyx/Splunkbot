@@ -1,2 +1,47 @@
 script
   var channel = "#{channel}";
+
+.row  
+  .span12
+    .page-header
+      .row
+        h1.span5.offset4
+          | Stats for #{channel}
+        div.btn-group.pull-right
+          - escapedchannel = encodeURIComponent(channel);
+          - var timeidx = 0;
+          - for (var i=0; i<times.length; i++)
+            - if (timewindow == times[i][1])
+              - timeidx = i
+          - var link = '<a class="btn btn-success" href="/stats/'+escapedchannel+'?timewindow='+times[timeidx][1]+'">'+times[timeidx][0]+'</a>'
+          !{link}
+          - if (times.length > 1)
+            a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
+              span.caret
+            ul.dropdown-menu
+              - for(var i=0;i<times.length;i++)
+                li
+                  - link = '<a href="/stats/'+escapedchannel+'?timewindow='+times[i][1]+'">'+times[i][0]+'</a>'
+                  !{link}
+        div.btn-group.pull-left
+          - escapedchannel = encodeURIComponent(channel);
+          a(href='/stats/#{escapedchannel}').btn.btn-success #{channel}
+            a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
+              span.caret
+            ul.dropdown-menu
+              - for(var i=0;i<channels.length;i++)
+                li
+                  - escapedchannel = encodeURIComponent(channels[i])
+                  a(href='/stats/#{escapedchannel}') #{channels[i]}
+.row
+  .span12
+    h2.span4.offset4 Activity Timeline
+    div(id='timeline',style='height: 150px;')
+div(style='height:50px;').row
+.row
+  .span6
+    h2.span4.offset1 Top Talkers
+    div(id='toptalkers',style='height: 300px;')
+  .span6
+    h2.span4.offset1 Most Mentioned
+    div(id='mostmentioned',style='height: 300px;')

@@ -6,6 +6,7 @@ Splunkbot = function() {
     var splunkbot = this;
     Async = Splunk.Async;
     utils = Splunk.Utils;
+    UI = Splunk.UI;
     $.getJSON('/splunkcreds.json', function(data) {
         var http = new Splunk.ProxyHttp("/proxy");
         splunkbot.service = new Splunk.Client.Service(http, data);
@@ -511,7 +512,7 @@ Splunkbot.prototype.livesearch = function(channel) {
         });
     });
     
-    var time = new Date().getTime() - ((splunkbot.serverTZOffset + new Date().getTimezoneOffset()) * 1000);
+    var time = new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
     splunkbot.logsearch("", undefined, channel, time, (30 * 60000));
 }
 
@@ -669,28 +670,27 @@ Splunkbot.prototype.map = function() {
     });
 }
 
-Splunkbot.prototype.timeline = function(channel) {
-    if (typeof time !== 'undefined') {
-        timewindow = typeof timewindow !== 'undefined' ? timewindow : (15 * 60000); // Default window, 15 minutes
-        var earliest = parseInt(time)-Math.round(timewindow/2,0);
-        var latest = parseInt(time)+Math.round(timewindow/2,0);
-        
-        searchstr = "search index=* earliest="+splunkbot.makesplunktime(earliest)
-                    +" latest="+splunkbot.makesplunktime(latest)+" | ";
+Splunkbot.prototype.timeline = function(channel, timewindow) {
+    if (typeof timewindow === 'undefined') {
+        timewindow = 86400000;
     }
+    var time = new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+    var earliest = parseInt(time)-timewindow;
+        
+    var searchTerm = "search earliest="+splunkbot.makesplunktime(earliest)+" `irclogs` | search to="+channel+" | bucket _time span=1h";
+    console.log("searchTerm: ", searchTerm);
     
     var timeline = null;
     var timelineToken = Splunk.UI.loadTimeline("/splunkbot/client/splunk.ui.timeline.js", function() {
       // Once we have the charting code, create a chart.
       timeline = new Splunk.UI.Timeline.Timeline($("#timeline"));
     });
-
-    var searchTerm = 'search `irclogs` | search to='+channel+' | bucket _time span=1h';
-
+    
     // A small utility function to queue up operations on the chart
     // until it is ready.
     var updateTimeline = function(data) {
       var setData = function() {
+        spinner1.spin();
         timeline.updateWithJSON(data);
       }
 
@@ -747,6 +747,128 @@ Splunkbot.prototype.timeline = function(channel) {
     });
 }
 
+Splunkbot.prototype.loadcharts = function(channel, timewindow) {
+    var splunkbot = this;
+    
+    var chartToken = Splunk.UI.loadCharting("/splunkbot/client/splunk.ui.charting.js", function() {
+        splunkbot.toptalkers(channel, timewindow, chartToken);
+        splunkbot.mostmentioned(channel, timewindow, chartToken);
+    });
+}
+
+Splunkbot.prototype.toptalkers = function(channel, timewindow, chartToken) {
+    var splunkbot = this;
+    if (typeof timewindow === 'undefined') {
+        timewindow = 86400000;
+    }
+    var time = new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+    var earliest = parseInt(time)-timewindow;
+    
+    var searchTerm = "search earliest="+splunkbot.makesplunktime(earliest)+" `irclogs` | search to="+channel
+                    +" | chart count by nick";
+    console.log("searchTerm: ", searchTerm);
+    
+    var chart = new Splunk.UI.Charting.Chart("#toptalkers", Splunk.UI.Charting.ChartType.PIE, false);
+    
+    Async.chain([
+      // Login
+      function(callback) { splunkbot.service.login(callback); },
+      // Create the job
+      function(success, callback) {
+        splunkbot.service.jobs().create(searchTerm, {status_buckets: 300}, callback);
+      },
+      // Loop until the job is "done"
+      function(job, callback) {
+        var searcher = new Splunk.Searcher.JobManager(job.service, job);
+
+        // Move forward once the search is done
+        searcher.done(callback);
+      },
+      // Get the final results data
+      function(searcher, callback) {
+        searcher.job.results({json_mode: "column"}, callback);
+      },
+      // Update the chart
+      function(results, job, callback) {  
+        Splunk.UI.ready(chartToken, function() {
+          spinner2.spin();
+          chart.setData(results, { });
+          chart.draw();
+          callback(null, job);
+        });
+      }
+    ],
+    // And we're done, so make sure we had no error, and
+    // cancel the job
+    function(err, job) {
+      if (err) {
+        console.log(err);
+        alert("An error occurred");
+      }
+
+      if (job) {
+        job.cancel();
+      }
+    });
+}
+
+Splunkbot.prototype.mostmentioned = function(channel, timewindow, chartToken) {
+    var splunkbot = this;
+    if (typeof timewindow === 'undefined') {
+        timewindow = 86400000;
+    }
+    var time = new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+    var earliest = parseInt(time)-timewindow;
+    
+    var searchTerm = "search earliest="+splunkbot.makesplunktime(earliest)+" `irclogs` | search action=message | "
+                    +"rex field=text mode=sed \"s/://g\" | rex field=text mode=sed \"s/,//g\" | makemv delim=\" \" text | "
+                    +"mvexpand text | rename text as nick| join nick [ search index=\"*\" sourcetype=\"splunkbot_logs\" "
+                    +"action=names | makemv delim=\" \" names | mvexpand names | rename names as nick ] | chart count by nick";
+    console.log("searchTerm: ", searchTerm);
+    
+    var chart = new Splunk.UI.Charting.Chart("#mostmentioned", Splunk.UI.Charting.ChartType.PIE, false);
+    
+    Async.chain([
+      // Login
+      function(callback) { splunkbot.service.login(callback); },
+      // Create the job
+      function(success, callback) {
+        splunkbot.service.jobs().create(searchTerm, {status_buckets: 300}, callback);
+      },
+      // Loop until the job is "done"
+      function(job, callback) {
+        var searcher = new Splunk.Searcher.JobManager(job.service, job);
+
+        // Move forward once the search is done
+        searcher.done(callback);
+      },
+      // Get the final results data
+      function(searcher, callback) {
+        searcher.job.results({json_mode: "column"}, callback);
+      },
+      // Update the chart
+      function(results, job, callback) {  
+        Splunk.UI.ready(chartToken, function() {
+          spinner3.spin();
+          chart.setData(results, { });
+          chart.draw();
+          callback(null, job);
+        });
+      }
+    ],
+    // And we're done, so make sure we had no error, and
+    // cancel the job
+    function(err, job) {
+      if (err) {
+        console.log(err);
+        alert("An error occurred");
+      }
+
+      if (job) {
+        job.cancel();
+      }
+    });
+}
 
 /***************************************************
 **      JQUERY & DOCUMENT FUNCTIONS               **
@@ -819,7 +941,16 @@ $(document).bind('creds_loaded', function() {
         spinner = new Spinner(opts).spin(target);
         
         splunkbot.map();
-    } else if (page == 'stats') {       
+    } else if (page == 'stats') {
+        opts.color='#000';
+        // Create the spinner
+        var target = $("#timeline")[0];
+        spinner1 = new Spinner(opts).spin(target);  
+        target = $("#toptalkers")[0];
+        spinner2 = new Spinner(opts).spin(target);
+        var target = $("#mostmentioned")[0];
+        spinner3 = new Spinner(opts).spin(target);     
         splunkbot.timeline(channel, urlParams.timewindow);
+        splunkbot.loadcharts(channel, urlParams.timewindow);
     }
 });

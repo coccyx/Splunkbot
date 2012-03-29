@@ -188,6 +188,14 @@ You can configure node to run as a daemon, but for these purposes, I find it eas
     
 This assumes the node binary is already in your path.  
 
+### The last Hack
+
+Because I'm lazy and I haven't introduced configurations into the client side javascript yet, you'll have to hand edit Splunkbot.js (and break your ability to easily pull from git, sorry) and modify the Timezone offset if you want the live display to properly show you the last 15 minutes of chat or so.  We plan to fix this sometime.  Edit the following line of code in splunkbot.js:
+
+    splunkbot.serverTZOffset = (60 * 6);
+    
+It's line 18 currently.  Change the 6 to whatever timezone offset you're at (default to -, so -6 is Mountain Daylight Time, or Central Standard Time).  The new server is in UTC, so I replaced 6 with 0.
+
 ## Using Splunkbot
 
 Congrats!  You should now have a working Splunkbot install.  To use Splunkbot, first see the IRC commands, which should like to your web GUI from within IRC.  Available commands:

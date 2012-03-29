@@ -4,7 +4,7 @@ var fs = require('fs');
 WEBCONFIG = require('config').web;
 var testresults = require('config').testresults;
 
-function writeResults(results) {
+function writeResults(results, channel) {
     var rows = results.rows;
     var fields = results.fields;
     var types = [ 'circle', 'star', 'triangle' ];
@@ -60,7 +60,7 @@ function writeResults(results) {
         adjacenciesIdx++;
     }
     
-    fs.open('web/public/splunkbot/map.json', 'w', function (err, fd) {
+    fs.open(WEBCONFIG.path+'/web/public/splunkbot/map_'+channel+'.json', 'w', function (err, fd) {
         fs.write(fd, JSON.stringify(json, null, 2), null, 'utf8', function(){
             fs.close(fd);
         });
@@ -68,17 +68,19 @@ function writeResults(results) {
 }
 
 
+for (var i=0; i < WEBCONFIG.channels.length; i++) {
+    var channel = WEBCONFIG.channels[i];
+    var searchstring = 'search `irclogs` | search [ search `irclogs` | search to='+channel+' | '
+                        +'stats count by nick | sort 15 -count | fields nick | format ] | '
+                        +'dedup nick | map [ search `irclogs` | search text="*$nick$*" | '
+                        +'rename nick as connection | eval nick="$nick$" ] maxsearches=30 | '
+                        +'stats count by nick, connection';
 
-var searchstring = 'search `irclogs` | search [ search `irclogs` | search to=#* | '
-                    +'stats count by nick | sort 15 -count | fields nick | format ] | '
-                    +'dedup nick | map [ search `irclogs` | search text="*$nick$*" | '
-                    +'rename nick as connection | eval nick="$nick$" ] maxsearches=30 | '
-                    +'stats count by nick, connection';
+    // var searchstring = 'search `irclogs` | search to=#* | stats count by nick | sort 10 -count';
 
-// var searchstring = 'search `irclogs` | search to=#* | stats count by nick | sort 10 -count';
-                    
-splunk.search(searchstring, function(err, results) {
-    writeResults(results);
-}, "-7d", "now");
+    splunk.search(searchstring, function(err, results) {
+        writeResults(results, channel);
+    }, "-7d", "now");
+}
 
 // writeResults(testresults);

@@ -99,10 +99,11 @@ app.get('/search', function(req, res, next) {
     res.render('search', pagevars);
 });
 
-app.get('/map', function(req, res, next) {
+app.get('/map/:channel?', function(req, res, next) {
     pagevars.page = 'map';
     pagevars.search = 'Search';
     pagevars.colors = CONFIG.colors;
+    pagevars.channel = req.params.channel || pagevars.channels[0];
     res.render('map', pagevars);
 });
 

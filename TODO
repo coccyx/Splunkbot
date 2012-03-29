@@ -4,19 +4,6 @@ Things to do:
   * seen: Splunk search for the last time we've seen the nick mentioned.  Print to IRC and provide link to a web interface that shows their last few conversations
     * need to make sure we search based on the channel !seen comes in on, not allowed in private messages
   * lastkicks: Provide a list of the last X kicks with reasons
-  
-
-* Implement web interface
-  * Serves IRC requests which will be a link to the referenced output, report essentially
-  * Web interface which provides statistics by channel, with sparklines and timechart graphs of activity
-  * Allows easy searching of history etc
-    * Allow a slider which allows searches to expand to a grep list -<num> view... they will default see 2 events around it but allow expandability to 5 or 10 lines so they can see the conversation around it
-    * Clicking on a time should give a log like view to the events for a few minutes surrounding that time
-  * Web interface provides analytics for the channel
-    * top talkers
-    * Most active times
-    * Most frequent linked sites
-    * Most talked about links (activity around the link, how many lines)
     
 * Implement plug-in architecture
   * Allow easy scripting of the bot in JS.

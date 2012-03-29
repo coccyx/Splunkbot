@@ -1,10 +1,22 @@
 script(src='/jit.js')
+script
+  channel = "#{channel}";
 .row
   .span12
     .page-header
       .row
-        h1
+        h1.span9
           | Chat Map - Who talks to Whom
+        div.btn-group.pull-right
+          - escapedchannel = encodeURIComponent(channel);
+          a(href='/map/#{escapedchannel}').btn.btn-success #{channel}
+            a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
+              span.caret
+            ul.dropdown-menu
+              - for(var i=0;i<channels.length;i++)
+                li
+                  - escapedchannel = encodeURIComponent(channels[i])
+                  a(href='/map/#{escapedchannel}') #{channels[i]}
     div(id='error').alert.alert-block.alert-error.fade.in.hide
       a(data-dismiss='alert',href='#').close &times;
       h4.alert-heading Fail!

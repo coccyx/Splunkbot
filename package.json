@@ -18,11 +18,14 @@
         "irc"
     ],
     "dependencies" : {
-        "splunk-sdk" : "0.1.0",
-        "config" : "0.4.10",
-        "irc": "0.3.3",
+        "splunk-sdk" : ">= 0.1.0",
+        "config" : ">= 0.4.10",
+        "irc": ">= 0.3.3",
         "request": "2.2.x",
-        "loggly": "0.3.11"
+        "loggly": ">= 0.3.11",
+        "express": ">= 2.5.8",
+        "less": ">= 0.0.1",
+        "jade": ">= 0.0.1"
     },
     "author" : {
         "name" : "Clint Sharp",

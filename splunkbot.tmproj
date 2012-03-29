@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>config/development.json</string>
+	<string>README.md</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -27,8 +27,6 @@
 			<string>config</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>web</string>
 			<key>regexFolderFilter</key>
@@ -46,7 +44,7 @@
 			<key>filename</key>
 			<string>index.js</string>
 			<key>lastUsed</key>
-			<date>2012-03-06T20:38:59Z</date>
+			<date>2012-03-27T18:49:24Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -86,80 +84,84 @@
 			<key>filename</key>
 			<string>README.md</string>
 			<key>lastUsed</key>
-			<date>2012-02-18T23:12:16Z</date>
+			<date>2012-03-27T20:55:34Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>dev.sh</string>
-			<key>selected</key>
-			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>genmapjson.js</string>
-			<key>selected</key>
-			<true/>
+			<key>lastUsed</key>
+			<date>2012-03-27T20:50:26Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>log.js</string>
-			<key>selected</key>
-			<true/>
+			<key>lastUsed</key>
+			<date>2012-03-27T20:52:02Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>NOTES.md</string>
-			<key>selected</key>
-			<true/>
+			<key>lastUsed</key>
+			<date>2012-03-27T18:59:26Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>package.json</string>
+			<key>lastUsed</key>
+			<date>2012-03-27T18:52:41Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
+		<key>README.md</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>38</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>650</integer>
+			<key>firstVisibleLine</key>
+			<integer>29</integer>
+		</dict>
 		<key>config/default.json</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>17</integer>
 				<key>line</key>
-				<integer>7</integer>
+				<integer>42</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>28</integer>
-				<key>line</key>
-				<integer>7</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>7</integer>
-			</dict>
+			<integer>19</integer>
 		</dict>
 		<key>config/development.json</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>34</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>464</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>453</integer>
+			<integer>0</integer>
 		</dict>
 		<key>index.js</key>
 		<dict>
@@ -175,16 +177,62 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>log.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>22</integer>
+				<key>line</key>
+				<integer>10</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>web/public/splunkbot/map.json</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>web/public/splunkbot/splunkbot.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>24</integer>
+				<key>line</key>
+				<integer>653</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>641</integer>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>index.js</string>
+		<string>log.js</string>
 		<string>config/default.json</string>
+		<string>README.md</string>
 		<string>config/development.json</string>
+		<string>web/public/splunkbot/map.json</string>
+		<string>web/public/splunkbot/splunkbot.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{367, 91}, {918, 751}}</string>
+	<string>{{396, 114}, {918, 751}}</string>
 </dict>
 </plist>

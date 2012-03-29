@@ -1,0 +1,67 @@
+{
+  "log": [
+      { "type": "syslog",
+        "host": "<IP or hostname>",
+        "port": <port, default 514> },
+      { "type": "storm",
+        "access_token": "<access_token obtained from Storm>",
+        "project_id": "<project id obtained from Storm>",
+        "sourcetype": "syslog",
+        "source": "<source name>",
+        "host": "<hostname>" },
+      { "type": "loggly",
+        "input_key": "<input_key from loggly>",
+        "subdomain": "<subdomain from loggly>",
+        "username": "<username>",
+        "password": "<password>" }
+  ],
+  "irc": [
+      {
+        "server": "<server1>",
+        "port": 6667,
+        "nick": "<IRC nick>",
+        "realName": "<IRC realname in /whois>",
+        "userName": "<IRC username>",
+        "stripColors": true,
+        "channels": [ "<#channel1>", "<#channel2>" ],
+        "version": "<CTCP VERSION reply>",
+        "autoConnect": false,
+        "retryCount": 10
+      },
+      {
+        "server": "<server2>",
+        "port": 6667,
+        "nick": "<IRC nick>",
+        "realName": "<IRC realname in /whois>",
+        "userName": "<IRC username>",
+        "stripColors": true,
+        "channels": [ "<#channel1>", "<#channel2>" ],
+        "version": "<CTCP VERSION reply>",
+        "autoConnect": false,
+        "retryCount": 10
+      },
+  ],
+  "splunk": {
+    "username": "<splunk username>",
+    "password": "<splunk password>",
+    "scheme": "https",
+    "host": "<splunk host>",
+    "port": <splunk management port, default 8089>
+  },
+  "web": {
+    "port": <port for the webserver, needs to be >1024 to not run as root, I used 8080>,
+    "host": "<hostname that will appear in IRC links, DNS entry or IP to this machine>",
+    "splunk_scheme": "https",
+    "splunk_host": "<splunk host>",
+    "splunk_port": "<splunk management port, default 8089>",
+    "splunk_username": "<splunk username>",
+    "splunk_password": "<splunk password>",
+    "maxnicklen": <max nick length in web views, I used 15>,
+    "channels": [ "<#channel1>", "<#channel2>" ],
+    "counts": [ 10, 25, 50, 100, 500, 1000 ],
+    "colors": [ "white", "cyan", "darkgrey", "red", "brightgreen", "yellow", "pink", "teal", "green", "blue", "darkblue", "grey", "darkred", "darkyellow" ],
+    "times": [ [ "15 minutes", 900000 ], [ "1 Hour", 3600000 ], [ "4 Hours", 14400000 ], [ "1 Day", 86400000 ] ],
+    "stats_times": [ [ "1 Day", 86400000 ], [ "1 Week", 604800000 ], [ "1 Month", 2592000000 ] ],
+    "path": "</path/to/splunkbot>"
+  }
+}

@@ -517,7 +517,8 @@ Splunkbot.prototype.livesearch = function(channel) {
 }
 
 Splunkbot.prototype.map = function() {
-    $.getJSON('/splunkbot/map.json', function(json) {
+    // Channel variable gets set by page template
+    $.getJSON('/splunkbot/map_'+channel+'.json', function(json) {
         spinner.spin();
         var labelType, useGradients, nativeTextSupport, animate;
         

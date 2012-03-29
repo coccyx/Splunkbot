@@ -98,6 +98,8 @@ The Splunkbot app for Splunk adds an index and some default dashboards and searc
 To generate the map, we use an offline process that runs hourly to generate cached results to feed into the map.  This is optimal because the processing time required to do the search to feed the map is too long to make it feasible to run for every map display request.  In order to feed this though, we need a way to execute the search on a regular basis.  The easiest way is to add this to the cron.hourly directory:
 
     ln -s /path/to/splunkbot/cron.sh /etc/cron.hourly/splunkbot
+
+**You'll need to edit cron.sh to match your installation!**
     
 ### Configuring Splunkbot
 

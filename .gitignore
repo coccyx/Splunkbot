@@ -1,5 +1,6 @@
 config/default.json
 config/development.json
 web/public/splunkbot/map.json
+node_modules
 .DS_Store
 *.DS_Store

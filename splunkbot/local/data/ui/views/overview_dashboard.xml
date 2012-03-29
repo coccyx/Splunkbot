@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<dashboard>
+  <label>Overview</label>
+  <row>
+    <chart>
+      <searchString>`irclogs` | search to=#* | timechart span=1h count</searchString>
+      <title>Overall Activity</title>
+      <earliestTime>-7d@h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="charting.axisTitleX.height">0</option>
+      <option name="charting.axisTitleX.margin">0</option>
+      <option name="charting.axisTitleX.placement">none</option>
+      <option name="charting.chart">column</option>
+      <option name="charting.legend.placement">none</option>
+      <option name="height">100px</option>
+    </chart>
+  </row>
+  <row>
+    <chart>
+      <searchName>Top Talkers Chart</searchName>
+      <title>Top Talkers Chart</title>
+      <option name="charting.chart">pie</option>
+    </chart>
+    <chart>
+      <searchName>Most Mentioned Chart</searchName>
+      <title>Most Mentioned Chart</title>
+      <option name="charting.chart">pie</option>
+    </chart>
+  </row>
+</dashboard>

@@ -1,0 +1,65 @@
+[default]
+
+[app/launcher]
+modtime = 1329027090.187217000
+version = 4.3
+
+[app/ui]
+modtime = 1329027090.184225000
+version = 4.3
+
+[indexes/splunkbot]
+owner = admin
+modtime = 1329027320.654016000
+version = 4.3
+
+[macros/irclogs]
+access = read : [ * ]
+owner = admin
+modtime = 1329517203.430934000
+version = 4.3
+export = system
+
+[savedsearches/Most%20Mentioned%20Chart]
+owner = admin
+modtime = 1329549690.975358000
+version = 4.3
+export = none
+
+[savedsearches/Splunkbot%20Logs%20Timechart]
+owner = admin
+modtime = 1329028464.303069000
+version = 4.3
+export = none
+
+[savedsearches/Top%20Talkers%20Chart]
+owner = admin
+modtime = 1329549724.305306000
+version = 4.3
+export = none
+
+[views/overview_dashboard]
+access = read : [ * ], write : [ admin ]
+owner = admin
+modtime = 1331522778.086605000
+version = 4.3.1
+export = none
+
+[viewstates/flashtimeline%3Agyjp5kdd]
+owner = nobody
+modtime = 1329028332.514243000
+version = 4.3
+export = system
+
+[viewstates/flashtimeline%3Agyjpkmby]
+owner = nobody
+modtime = 1329029034.941858000
+version = 4.3
+export = system
+
+[viewstates/flashtimeline%3Agyjrv9vm]
+owner = nobody
+modtime = 1329032891.459021000
+version = 4.3
+export = system
+

@@ -78,9 +78,17 @@ For the Javascript SDK to work, you'll need to install an app in your Splunk ins
     sudo cp -R /path/to/splunkbot/node_modules/splunk-sdk/new_english /path/to/splunk/etc/apps
     sudo chown -R splunk /path/to/splunk/etc/apps/new_english
     sudo /path/to/splunk/bin/splunk enable new_english
-    sudo /path/to/splunk/bin/splunk restart
     
 If your Splunk host is different from your Splunkbot host, you'll also need to edit `$SPLUNK_HOME/etc/apps/new_english/default/json.conf` to include your IP.
+
+### Adding the Splunkbot Splunk app
+
+The Splunkbot app for Splunk adds an index and some default dashboards and searches we'll need.  To install the app, its very similar to the new_english app:
+
+    sudo cp -R /path/to/splunkbot/splunkbot_app/* /path/to/splunk/etc/apps
+    sudo chown -R splunk /path/to/splunk/etc/apps/splunkbot_app
+    sudo /path/to/splunk/bin/splunk enable splunkbot_app
+    sudo /path/to/splunk/bin/splunk restart
 
 ### Generating the map
 

@@ -10,3 +10,7 @@ Things to do:
   * Provide limited abstracted limited API to say, notice, etc
   * Provide emitters for message, join, etc
   
+  
+  `irclogs` | search action=message |  transaction to endswith=eval(match(text, "^!save")) maxevents=10
+  search `irclogs` | search action=message | transaction to endswith=eval(match(text, "^!save")) maxevents=10 mvlist=t | fields action, nick, to, text
+  

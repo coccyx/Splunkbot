@@ -174,7 +174,8 @@ Example.json is reproduced here as well:
         "colors": [ "white", "cyan", "darkgrey", "red", "brightgreen", "yellow", "pink", "teal", "green", "blue", "darkblue", "grey", "darkred", "darkyellow" ],
         "times": [ [ "15 minutes", 900000 ], [ "1 Hour", 3600000 ], [ "4 Hours", 14400000 ], [ "1 Day", 86400000 ] ],
         "stats_times": [ [ "1 Day", 86400000 ], [ "1 Week", 604800000 ], [ "1 Month", 2592000000 ] ],
-        "path": "</path/to/splunkbot>"
+        "path": "</path/to/splunkbot>",
+        "server_tz_offset": 0
       }
     }
     
@@ -187,14 +188,6 @@ You can configure node to run as a daemon, but for these purposes, I find it eas
     node index.js
     
 This assumes the node binary is already in your path.  
-
-### The last Hack
-
-Because I'm lazy and I haven't introduced configurations into the client side javascript yet, you'll have to hand edit Splunkbot.js (and break your ability to easily pull from git, sorry) and modify the Timezone offset if you want the live display to properly show you the last 15 minutes of chat or so.  We plan to fix this sometime.  Edit the following line of code in splunkbot.js:
-
-    splunkbot.serverTZOffset = (60 * 6);
-    
-It's line 18 currently.  Change the 6 to whatever timezone offset you're at (default to -, so -6 is Mountain Daylight Time, or Central Standard Time).  The new server is in UTC, so I replaced 6 with 0.
 
 ## Using Splunkbot
 

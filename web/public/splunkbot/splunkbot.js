@@ -15,7 +15,8 @@ Splunkbot = function() {
     splunkbot.nicks = { };
     splunkbot.currentcoloridx = 4;
     splunkbot.currentliverow = 0;
-    splunkbot.serverTZOffset = (60 * 6);
+    splunkbot.serverTZOffset = -serverTZOffset; // getTimezoneOffset returns positive for negative
+                                                // timezones, so pacific is 8 instead of -8
 }
 
 /***************************************************
@@ -71,6 +72,13 @@ Splunkbot.prototype.makedate = function (datestr) {
 }
 
 /*
+** Returns current time compensated for timezone
+*/
+Splunkbot.prototype.gettime = function() {
+    return new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+}
+
+/*
 ** Takes any date Javascript can parse and outputs HH:MM:SS
 */
 Splunkbot.prototype.maketime = function(datestr) {
@@ -79,10 +87,10 @@ Splunkbot.prototype.maketime = function(datestr) {
 }
 
 /*
-** Takes any date Javascriptcan parse and outputs UNIX timestamp
+** Takes any date Javascriptcan parse and outputs UNIX timestamp at server time
 */
 Splunkbot.prototype.makeunixtime = function(datestr) {
-    return new Date(datestr).getTime();
+    return new Date(datestr).getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
 }
 
 /*
@@ -306,8 +314,9 @@ Splunkbot.prototype.search = function(searchstr, callback) {
 /*
 ** Search Splunk.  Takes full splunk search string and calls a callback with (err, results)
 */
-Splunkbot.prototype.rtsearch = function(searchstr, callback) {
+Splunkbot.prototype.rtsearch = function(searchstr, callback, donecallback) {
     var splunkbot = this;
+    var donecallback = donecallback || function () { };
     Async.chain([
             // First, we log in
             function(done) {
@@ -327,7 +336,7 @@ Splunkbot.prototype.rtsearch = function(searchstr, callback) {
             // The search is never going to be done, so we simply poll it every second to get
             // more results
             function(job, done) {
-                var MAX_COUNT = 10 * 60; // 10 Minutes
+                var MAX_COUNT = 100 * 60; // 10 Minutes
                 var count = 0;
                 
                 // Since search will never be done, register an unload event which will close the search
@@ -347,11 +356,12 @@ Splunkbot.prototype.rtsearch = function(searchstr, callback) {
                                 if (err) {
                                     iterationDone(err);
                                 }
+
+                                // Up the iteration counter
+                                count++;
                             
                                 // Only do something if we have results
                                 if (results.rows) {                                    
-                                    // Up the iteration counter
-                                    count++;
                                 
                                     // console.log("========== Iteration " + count + " ==========");
                                     // var sourcetypeIndex = utils.indexOf(results.fields, "sourcetype");
@@ -383,6 +393,7 @@ Splunkbot.prototype.rtsearch = function(searchstr, callback) {
                     // When we're done looping, just cancel the job
                     function(err) {
                         job.cancel(done);
+                        donecallback();
                     }
                 );
             }
@@ -509,10 +520,13 @@ Splunkbot.prototype.livesearch = function(channel) {
                     }
                 }
             }
+        }, function() {
+           $('#errortext').text('Realtime search has timed out.  Hit refresh to keep watching the live view.');
+           $('#error').show(); 
         });
     });
     
-    var time = new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+    var time = splunkbot.gettime();
     splunkbot.logsearch("", undefined, channel, time, (30 * 60000));
 }
 
@@ -675,7 +689,7 @@ Splunkbot.prototype.timeline = function(channel, timewindow) {
     if (typeof timewindow === 'undefined') {
         timewindow = 86400000;
     }
-    var time = new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+    var time = splunkbot.gettime();
     var earliest = parseInt(time)-timewindow;
         
     var searchTerm = "search earliest="+splunkbot.makesplunktime(earliest)+" `irclogs` | search to="+channel+" | bucket _time span=1h";
@@ -762,7 +776,7 @@ Splunkbot.prototype.toptalkers = function(channel, timewindow, chartToken) {
     if (typeof timewindow === 'undefined') {
         timewindow = 86400000;
     }
-    var time = new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+    var time = splunkbot.gettime();
     var earliest = parseInt(time)-timewindow;
     
     var searchTerm = "search earliest="+splunkbot.makesplunktime(earliest)+" `irclogs` | search to="+channel
@@ -818,7 +832,7 @@ Splunkbot.prototype.mostmentioned = function(channel, timewindow, chartToken) {
     if (typeof timewindow === 'undefined') {
         timewindow = 86400000;
     }
-    var time = new Date().getTime() - ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+    var time = splunkbot.gettime();
     var earliest = parseInt(time)-timewindow;
     
     var searchTerm = "search earliest="+splunkbot.makesplunktime(earliest)+" `irclogs` | search action=message | "
@@ -925,6 +939,9 @@ $(document).bind('creds_loaded', function() {
         // Create the spinner
         var target = $("#logbox")[0];
         spinner = new Spinner(opts).spin(target);
+        
+        var offsettime = parseInt(urlParams["time"]) + ((splunkbot.serverTZOffset - new Date().getTimezoneOffset()) * 60 * 1000);
+        $("#timestr").html(splunkbot.makedate(offsettime)+" "+splunkbot.maketime(offsettime));
 
         // Search splunk and output the results to the table
         splunkbot.logsearch(urlParams.q, urlParams.count || 10, urlParams.channel, 

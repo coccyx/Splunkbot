@@ -113,10 +113,23 @@ IrcBot.prototype.addListeners = function() {
             var seppos = text.search(" ") > 0 ? text.search(" ") : text.length;
             var command = text.substr(1, seppos-1);
             var argstr = text.substr(seppos+1);
+            var channel = '';
             
             // Validate input
             if (!argstr.search("|")) {
-                ircBot.dispatchCommand(nick, command, argstr, to);
+                if (to.charAt(0) != "#") {
+                    for (var tempchan in ircBot.names) {
+                        if (nick in ircBot.names[tempchan]) {
+                            channel = tempchan;
+                            break;
+                        }
+                    }
+                    // Stop gap if we don't find the nick, return results from the first configured channel
+                    if (channel.length == 0) {
+                        channel = ircBot.config.channels[0];
+                    }
+                }
+                ircBot.dispatchCommand(nick, command, argstr, to, channel);
             }
         }
         var objout = { server: this.opt.server, action: action, nick: nick, prettynick: ircBot.prettynick(to, nick),
@@ -171,16 +184,16 @@ IrcBot.prototype.addListeners = function() {
 ** When we receive a message, if it contains a preceding !, we send the parsed
 ** output to this function to determine which actions to take
 */
-IrcBot.prototype.dispatchCommand = function(nick, command, argstr, to) {
+IrcBot.prototype.dispatchCommand = function(nick, command, argstr, to, channel) {
     var ircBot = this;
     var dispatch = { }
     dispatch.live = function() {
-        ircBot.client.say(to, nick+': Live view of '+to+' can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
-                                +'/live/'+encodeURIComponent(to));
+        ircBot.client.say(to, nick+': Live view of '+channel+' can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
+                                +'/live/'+encodeURIComponent(channel));
     }
     dispatch.stats = function() {
         ircBot.client.say(to, nick+': Stats can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
-                                +'/stats/'+encodeURIComponent(to));
+                                +'/stats/'+encodeURIComponent(channel));
     }
     dispatch.search = function() {
         // 2.28 CS - Replacing IRC functionality with link to web interface
@@ -206,11 +219,11 @@ IrcBot.prototype.dispatchCommand = function(nick, command, argstr, to) {
         //                 }
         //             }, argstr);
         ircBot.client.say(to, nick+': Last 10 URLs can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
-                                +'/urls/10/'+encodeURIComponent(to));
+                                +'/urls/10/'+encodeURIComponent(channel));
     }
     dispatch.map = function () {
         ircBot.client.say(to, nick+': Who talks to Whom can be found at http://'+ircBot.webconfig.host+':'+ircBot.webconfig.port
-                                +'/map');
+                                +'/map/'+encodeURIComponent(channel));
     }
     if (typeof dispatch[command] === 'function') {
         dispatch[command]();

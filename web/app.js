@@ -8,7 +8,7 @@ var express = require('express')
   , CONFIG = require('config').web
   , search = require('../search')
   , irclog = require('../irclog')
-  , pagevars = { }
+  , pagevars = { 'serverTZOffset': CONFIG.server_tz_offset}
   , request = require('request');
 
 var app = module.exports = express.createServer();
@@ -87,9 +87,10 @@ app.get('/search', function(req, res, next) {
     pagevars.search = req.query.q || 'Search';
     pagevars.channel = req.query.channel;
     pagevars.time = req.query.time;
-    if (typeof req.query.time !== 'undefined') {
-        pagevars.timestr = irclog.makedate(parseInt(req.query.time))+" "+irclog.maketime(parseInt(req.query.time));
-    }
+    // if (typeof req.query.time !== 'undefined') {
+    //     var offsettime = req.query.time - ((-CONFIG.server_tz_offset - (0)) * 60 * 1000)
+    //     pagevars.timestr = irclog.makedate(parseInt(offsettime))+" "+irclog.maketime(parseInt(offsettime));
+    // }
     pagevars.timewindow = req.query.timewindow;
     pagevars.highlight = req.query.highlight;
     pagevars.count = req.query.count || 10;

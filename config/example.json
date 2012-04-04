@@ -62,6 +62,7 @@
     "colors": [ "white", "cyan", "darkgrey", "red", "brightgreen", "yellow", "pink", "teal", "green", "blue", "darkblue", "grey", "darkred", "darkyellow" ],
     "times": [ [ "15 minutes", 900000 ], [ "1 Hour", 3600000 ], [ "4 Hours", 14400000 ], [ "1 Day", 86400000 ] ],
     "stats_times": [ [ "1 Day", 86400000 ], [ "1 Week", 604800000 ], [ "1 Month", 2592000000 ] ],
-    "path": "</path/to/splunkbot>"
+    "path": "</path/to/splunkbot>",
+    "server_tz_offset": 0
   }
 }

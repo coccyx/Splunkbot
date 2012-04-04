@@ -33,6 +33,11 @@ script
                 li
                   - escapedchannel = encodeURIComponent(channels[i])
                   a(href='/stats/#{escapedchannel}') #{channels[i]}
+    div(id='error').alert.alert-block.alert-error.fade.in.hide
+      a(data-dismiss='alert',href='#').close &times;
+      h4.alert-heading Fail!
+      p(id='errortext').
+        Will be set by javascript
 .row
   .span12
     h2.span4.offset4 Activity Timeline

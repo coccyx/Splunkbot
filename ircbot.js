@@ -118,9 +118,9 @@ IrcBot.prototype.addListeners = function() {
             // Validate input
             if (!argstr.search("|")) {
                 if (to.charAt(0) != "#") {
-                    for (var tempchan in Object.keys(ircBot.names)) {
-                        if (nick in ircBot.names[tempchan]) {
-                            channel = tempchan;
+                    for (var i=0; i < Object.keys(ircBot.names).length; i++) {
+                        if (nick in ircBot.names[Objects.keys(ircBot.names)[i]]) {
+                            channel = Object.keys(ircBot.names)[i];
                             break;
                         }
                     }

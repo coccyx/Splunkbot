@@ -117,8 +117,10 @@ IrcBot.prototype.addListeners = function() {
             
             // Validate input
             if (!argstr.search("|")) {
-                if (to.charAt(0) != "#") {
+                if (to.charAt(0) != "#") {       
                     for (var i=0; i < Object.keys(ircBot.names).length; i++) {
+                        console.log(ircBot.names[Object.keys(ircBot.names)[i]]);
+                        console.log(nick);
                         if (nick in ircBot.names[Object.keys(ircBot.names)[i]]) {
                             channel = Object.keys(ircBot.names)[i];
                             break;
@@ -128,6 +130,9 @@ IrcBot.prototype.addListeners = function() {
                     if (channel.length == 0) {
                         channel = ircBot.config.channels[0];
                     }
+                    to = nick;
+                } else {
+                    channel = to;
                 }
                 ircBot.dispatchCommand(nick, command, argstr, to, channel);
             }

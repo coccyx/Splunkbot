@@ -140,7 +140,7 @@ Splunkbot.prototype.makeircline = function(row, fields) {
     };
     dispatch.message = function(result, fields) {
         // Make sure we have a string
-        row[fields.indexOf('text')] = row[fields.indexOf('text')] === null ? "" : row[fields.indexOf('text')];
+        row[fields.indexOf('text')] = typeof row[fields.indexOf('text')] !== 'string' ? "" : row[fields.indexOf('text')];
         // Escape any HTML affecting characters
         row[fields.indexOf('text')] = row[fields.indexOf('text')].replace(/&/g,'&amp;').                                         
                                                                     replace(/>/g,'&gt;').                                           
@@ -317,7 +317,7 @@ Splunkbot.prototype.search = function(searchstr, callback) {
 Splunkbot.prototype.rtsearch = function(searchstr, callback, donecallback) {
     var splunkbot = this;
     var donecallback = donecallback || function () { };
-    var MAX_COUNT = 100 * 60; // 10 Minutes
+    var MAX_COUNT = 10 * 60; // 10 Minutes
     Async.chain([
             // First, we log in
             function(done) {
@@ -331,7 +331,7 @@ Splunkbot.prototype.rtsearch = function(searchstr, callback, donecallback) {
             
                 splunkbot.service.search(
                     searchstr, 
-                    {earliest_time: "rt", latest_time: "rt", auto_cancel: MAX_COUNT}, 
+                    {earliest_time: "rt-1m", latest_time: "rt", auto_cancel: MAX_COUNT, max_time: MAX_COUNT}, 
                     done);
             },
             // The search is never going to be done, so we simply poll it every second to get

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>web/public/splunkbot/splunkbot.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -17,8 +15,6 @@
 			<string>node_modules</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>config</string>
 			<key>regexFolderFilter</key>
@@ -27,8 +23,6 @@
 			<string>config</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>web</string>
 			<key>regexFolderFilter</key>
@@ -40,7 +34,7 @@
 			<key>filename</key>
 			<string>ircbot.js</string>
 			<key>lastUsed</key>
-			<date>2012-03-30T16:41:24Z</date>
+			<date>2012-04-04T22:08:54Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -56,7 +50,7 @@
 			<key>filename</key>
 			<string>TODO</string>
 			<key>lastUsed</key>
-			<date>2012-03-30T16:37:56Z</date>
+			<date>2012-04-17T22:56:34Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -74,7 +68,7 @@
 			<key>filename</key>
 			<string>run.sh</string>
 			<key>lastUsed</key>
-			<date>2012-02-18T05:16:29Z</date>
+			<date>2012-04-04T22:08:53Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -86,7 +80,7 @@
 			<key>filename</key>
 			<string>README.md</string>
 			<key>lastUsed</key>
-			<date>2012-03-30T16:38:07Z</date>
+			<date>2012-04-04T22:08:56Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -96,7 +90,9 @@
 			<key>filename</key>
 			<string>genmapjson.js</string>
 			<key>lastUsed</key>
-			<date>2012-03-27T20:50:26Z</date>
+			<date>2012-04-17T22:56:35Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -120,119 +116,10 @@
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
-	<dict>
-		<key>README.md</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>384</integer>
-				<key>line</key>
-				<integer>192</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>181</integer>
-		</dict>
-		<key>TODO</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>103</integer>
-				<key>line</key>
-				<integer>13</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>config/example.json</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>37</integer>
-				<key>line</key>
-				<integer>48</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>29</integer>
-		</dict>
-		<key>ircbot.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>60</integer>
-				<key>line</key>
-				<integer>128</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>202</integer>
-		</dict>
-		<key>web/public/splunkbot/map.json</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>web/public/splunkbot/splunkbot.js</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>31</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>web/views/search.jade</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>22</integer>
-				<key>line</key>
-				<integer>27</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>18</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>README.md</string>
-		<string>config/example.json</string>
-		<string>web/public/splunkbot/map.json</string>
-		<string>web/public/splunkbot/splunkbot.js</string>
-		<string>ircbot.js</string>
-		<string>TODO</string>
-		<string>web/views/search.jade</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{396, 114}, {918, 751}}</string>
+	<string>{{301, 86}, {918, 751}}</string>
 </dict>
 </plist>

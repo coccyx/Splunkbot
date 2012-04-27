@@ -14,3 +14,4 @@ Things to do:
   `irclogs` | search action=message |  transaction to endswith=eval(match(text, "^!save")) maxevents=10
   search `irclogs` | search action=message | transaction to endswith=eval(match(text, "^!save")) maxevents=10 mvlist=t | fields action, nick, to, text
   
+  index=splunkbot (http:// OR https://) (*jpg* OR *img* OR *gif* OR *png*) | spath path=text | rex field=text "(?<url>http([s]*)://\S+)" | table url

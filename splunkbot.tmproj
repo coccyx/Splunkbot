@@ -23,6 +23,8 @@
 			<string>config</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>web</string>
 			<key>regexFolderFilter</key>
@@ -91,8 +93,6 @@
 			<string>genmapjson.js</string>
 			<key>lastUsed</key>
 			<date>2012-04-17T22:56:35Z</date>
-			<key>selected</key>
-			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>

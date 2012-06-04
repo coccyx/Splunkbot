@@ -1,6 +1,6 @@
 SPLUNKSEARCHCONFIG = require('config').splunk;
 var util = require('util');
-var Splunk = require('splunk-sdk').Splunk;
+var Splunk = require('splunk-sdk');
 var Async  = Splunk.Async;
 
 /*
@@ -39,7 +39,7 @@ function search(searchstr, callback, earliest_time, latest_time) {
     }
     parms['count'] = 50000;
     
-    var service = new Splunk.Client.Service({
+    var service = new Splunk.Service({
         username: SPLUNKSEARCHCONFIG.username,
         password: SPLUNKSEARCHCONFIG.password,
         scheme: SPLUNKSEARCHCONFIG.scheme,

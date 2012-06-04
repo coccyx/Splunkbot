@@ -60,6 +60,8 @@ function writeResults(results, channel) {
         adjacenciesIdx++;
     }
     
+    // console.log(json);
+    
     fs.open(WEBCONFIG.path+'/web/public/splunkbot/map_'+channel+'.json', 'w', function (err, fd) {
         fs.write(fd, JSON.stringify(json, null, 2), null, 'utf8', function(){
             fs.close(fd);
@@ -78,6 +80,7 @@ for (var i=0; i < WEBCONFIG.channels.length; i++) {
 
     // var searchstring = 'search `irclogs` | search to=#* | stats count by nick | sort 10 -count';
 
+    // console.log("Search: "+searchstring);
     splunk.search(searchstring, function(err, results) {
         writeResults(results, channel);
     }, "-7d", "now");

@@ -808,7 +808,7 @@ Splunkbot.prototype.toptalkers = function(channel, timewindow, chartToken) {
       },
       // Get the final results data
       function(searcher, callback) {
-        searcher.job.results({json_mode: "json_cols"}, callback);
+        searcher.job.results({output_mode: "json_cols"}, callback);
       },
       // Update the chart
       function(results, job, callback) {  
@@ -866,7 +866,7 @@ Splunkbot.prototype.mostmentioned = function(channel, timewindow, chartToken) {
       },
       // Get the final results data
       function(searcher, callback) {
-        searcher.job.results({json_mode: "json_cols"}, callback);
+        searcher.job.results({output_mode: "json_cols"}, callback);
       },
       // Update the chart
       function(results, job, callback) {  

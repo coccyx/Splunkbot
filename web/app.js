@@ -104,8 +104,55 @@ app.get('/map/:channel?', function(req, res, next) {
     pagevars.page = 'map';
     pagevars.search = 'Search';
     pagevars.colors = CONFIG.colors;
+    pagevars.channels = CONFIG.channels;
     pagevars.channel = req.params.channel || pagevars.channels[0];
     res.render('map', pagevars);
+});
+
+app.all('/gettitle/:titleurl', function(req, res) {
+    var error = {d: { __messages: [{ type: "ERROR", text: "gettitle Error", code: "PROXY"}] }};
+    
+    var writeError = function() {
+        res.writeHead(500, {});
+        res.write(JSON.stringify(error));
+        res.end();
+    };
+    
+    try {
+        try {
+            // console.log("Making gettitle request to ", req.params.titleurl);
+            request(req.params.titleurl, function(err, response, data) {
+                // console.log("Request came back.");
+                try {
+                    titlere = new RegExp("<title>([^<]+)</title>");
+                    titlematch = titlere.exec(data);
+                    if (titlematch !== null) {
+                        ret = { 'title': titlematch[1] }
+                        res.writeHead(200, {});
+                        // console.log("gettitle response: ", JSON.stringify(ret))
+                        res.write(JSON.stringify(ret));
+                        res.end();
+                    } else {
+                        res.writeHead(200, {});
+                        res.write(JSON.stringify({'title': ''}));
+                        res.end();
+                    }
+                }
+                catch (ex) {
+                    // console.log("Caught exception: ", ex)
+                    writeError();
+                }
+            });
+        }
+        catch (ex) {
+            // console.log("Caught exception: ", ex)
+            writeError();
+        }
+    }
+    catch (ex) {
+        // console.log("Caught exception: ", ex)
+        writeError();
+    }
 });
 
 app.all('/proxy/*', function (req, res) {

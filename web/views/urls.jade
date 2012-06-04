@@ -5,10 +5,10 @@ script
   .span12
     .page-header
       .row
-        h1.span5
-          | Last &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; URLs on
+        h1.span10
+          | Last URLs
         - var escapedchannel = ''
-        div(style='margin-left: -307px;').btn-group.span2
+        div.btn-group.pull-right
           - escapedchannel = encodeURIComponent(channel);
           a(href='/urls/#{urlcount}/#{escapedchannel}').btn.btn-success #{urlcount}
           - if (counts.length > 1)
@@ -18,7 +18,7 @@ script
               - for(var i=0;i<counts.length;i++)
                 li
                   a(href='/urls/#{counts[i]}/#{escapedchannel}') #{counts[i]}
-        div(style='margin-left: -105px;').btn-group.span2
+        div.btn-group.pull-left
           a(href='/urls/#{urlcount}/#{escapedchannel}',id='channelbutton').btn.btn-success #{channel}
           - if (channels.length > 1)
             a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
@@ -37,10 +37,11 @@ script
       thead
         tr
           th
-          th(style='width: 650px;') URL
+          th(style='width: 400px;') URL
+          th(style='width: 300px;') Title
           th By
           th At
       tbody(id='urlstablebody')
         tr
-          td(colspan=4)
+          td(colspan=5)
             div.center(id='spinner', style="height: 100px;")

@@ -76,9 +76,9 @@ This enables the user role to have access to real time searches (required).  The
 For the Javascript SDK to work, you'll need to install an app in your Splunk install to allow the Javascript SDK to work.  Splunk's REST API by default outputs XML, but Javascript groks JSON much better, so the developers have written a Splunk app to translate the XML to JSON for the Javascript SDK.  This app needs to be installed in Splunk.  Assuming your Splunkbot install and Splunk are on the same box (if not, lets hope you can figure this out):
 
     sudo cp -R /path/to/splunkbot/node_modules/splunk-sdk/new_english /path/to/splunk/etc/apps
-    sudo chown -R splunk /path/to/splunk/etc/apps/new_english
+    sudo chown -R splunk /path/to/splunk/etc/apps/xml2json
     sudo /path/to/splunk/bin/splunk restart
-    sudo /path/to/splunk/bin/splunk enable new_english
+    sudo /path/to/splunk/bin/splunk enable app xml2json
     sudo /path/to/splunk/bin/splunk restart
     
 If your Splunk host is different from your Splunkbot host, you'll also need to edit `$SPLUNK_HOME/etc/apps/new_english/default/json.conf` to include your IP.
@@ -87,10 +87,10 @@ If your Splunk host is different from your Splunkbot host, you'll also need to e
 
 The Splunkbot app for Splunk adds an index and some default dashboards and searches we'll need.  To install the app, its very similar to the new_english app:
 
-    sudo cp -R /path/to/splunkbot/splunkbot_app/* /path/to/splunk/etc/apps
+    sudo cp -R /path/to/splunkbot/splunkbot_app /path/to/splunk/etc/apps/
     sudo chown -R splunk /path/to/splunk/etc/apps/splunkbot_app
     sudo /path/to/splunk/bin/splunk restart
-    sudo /path/to/splunk/bin/splunk enable splunkbot_app
+    sudo /path/to/splunk/bin/splunk enable app splunkbot_app
     sudo /path/to/splunk/bin/splunk restart
 
 ### Generating the map

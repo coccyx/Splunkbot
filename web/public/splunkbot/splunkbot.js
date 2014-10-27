@@ -724,48 +724,17 @@ Splunkbot.prototype.timeline = function(channel, timewindow) {
       }
     };
 
-    Async.chain([
-      // Login
-      function(callback) { splunkbot.service.login(callback); },
-      // Create the job
-      function(success, callback) {
-        splunkbot.service.jobs().create(searchTerm, {status_buckets: 300}, callback);
-      },
-      // Loop until the job is "done"
-      function(job, callback) {
-        var searcher = new splunkjs.JobManager(job.service, job);
-
-        // Queue up timeline displays while we are querying the job
-        searcher.on("progress", function(properties) {
-          job.timeline({}, function(err, data) { 
-            if (!err) updateTimeline(data);
-          });
+    splunkbot.service.search(searchTerm, {status_buckets: 300}, function(err, job) {
+        job.track({period: 200}, {
+          progress: function(properties) {
+            job.timeline({}, function(err, data) { 
+              if (!err) updateTimeline(data);
+            });
+          },
+          done: function(job) {
+            job.timeline({});
+          }
         });
-
-        // Move forward once the search is done
-        searcher.on("done", callback);
-      },
-      // Get the final timeline data
-      function(searcher, callback) {
-        searcher.job.timeline({}, callback);
-      },
-      // Update the timeline control
-      function(timelineData, job, callback) {
-        updateTimeline(timelineData);
-        callback(null, job);
-      }
-    ],
-    // And we're done, so make sure we had no error, and
-    // cancel the job
-    function(err, job) {
-      if (err) {
-        console.log(err);
-        alert("An error occurred");
-      }
-
-      if (job) {
-        job.cancel();
-      }
     });
 }
 
@@ -792,45 +761,16 @@ Splunkbot.prototype.toptalkers = function(channel, timewindow, chartToken) {
     
     var chart = new splunkjs.UI.Charting.Chart("#toptalkers", splunkjs.UI.Charting.ChartType.PIE, false);
     
-    Async.chain([
-      // Login
-      function(callback) { splunkbot.service.login(callback); },
-      // Create the job
-      function(success, callback) {
-        splunkbot.service.jobs().create(searchTerm, {status_buckets: 300}, callback);
-      },
-      // Loop until the job is "done"
-      function(job, callback) {
-        var searcher = new splunkjs.JobManager(job.service, job);
-
-        // Move forward once the search is done
-        searcher.on("done", callback);
-      },
-      // Get the final results data
-      function(searcher, callback) {
-        searcher.job.results({output_mode: "json_cols"}, callback);
-      },
-      // Update the chart
-      function(results, job, callback) {  
-        splunkjs.UI.ready(chartToken, function() {
-          spinner2.spin();
-          chart.setData(results, { });
-          chart.draw();
-          callback(null, job);
+    splunkbot.service.search(searchTerm, {status_buckets: 300}, function(err,job) {
+      job.track({period:200}, {done: function(job) {
+        job.results({output_mode: "json_cols"}, function(results) {
+          splunkjs.UI.ready(chartToken, function() {
+            spinner2.spin();
+            chart.setData(results, { });
+            chart.draw();
+          });
         });
-      }
-    ],
-    // And we're done, so make sure we had no error, and
-    // cancel the job
-    function(err, job) {
-      if (err) {
-        console.log(err);
-        alert("An error occurred");
-      }
-
-      if (job) {
-        job.cancel();
-      }
+      }});
     });
 }
 
@@ -850,45 +790,16 @@ Splunkbot.prototype.mostmentioned = function(channel, timewindow, chartToken) {
     
     var chart = new splunkjs.UI.Charting.Chart("#mostmentioned", splunkjs.UI.Charting.ChartType.PIE, false);
     
-    Async.chain([
-      // Login
-      function(callback) { splunkbot.service.login(callback); },
-      // Create the job
-      function(success, callback) {
-        splunkbot.service.jobs().create(searchTerm, {status_buckets: 300}, callback);
-      },
-      // Loop until the job is "done"
-      function(job, callback) {
-        var searcher = new splunkjs.JobManager(job.service, job);
-
-        // Move forward once the search is done
-        searcher.on("done", callback);
-      },
-      // Get the final results data
-      function(searcher, callback) {
-        searcher.job.results({output_mode: "json_cols"}, callback);
-      },
-      // Update the chart
-      function(results, job, callback) {  
-        splunkjs.UI.ready(chartToken, function() {
-          spinner3.spin();
-          chart.setData(results, { });
-          chart.draw();
-          callback(null, job);
+    splunkbot.service.search(searchTerm, {status_buckets: 300}, function(err, job) {
+      job.track({period:200}, {done: function(job) {
+        job.results({output_mode: "json_cols"}, function(results) {
+          splunkjs.UI.ready(chartToken, function() {
+            spinner3.spin();
+            chart.setData(results, { });
+            chart.draw();
+          });
         });
-      }
-    ],
-    // And we're done, so make sure we had no error, and
-    // cancel the job
-    function(err, job) {
-      if (err) {
-        console.log(err);
-        alert("An error occurred");
-      }
-
-      if (job) {
-        job.cancel();
-      }
+      }});
     });
 }
 

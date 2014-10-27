@@ -8,30 +8,24 @@ var express = require('express')
   , CONFIG = require('config').web
   , search = require('../search')
   , irclog = require('../irclog')
+  , bodyParser = require('body-parser')
+  , methodOverride = require('method-override')
+  , errorHandler = require('errorhandler')
   , pagevars = { 'serverTZOffset': CONFIG.server_tz_offset}
   , request = require('request');
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
 
 // Configuration
 
-app.configure(function(){
+//app.configure(function(){
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(app.router);
+    app.use(bodyParser());
+    app.use(methodOverride());
+//    app.use(app.router);
     app.use(express.static(__dirname + '/public'));
-});
-
-app.configure('development', function(){
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-    app.set('view options', { pretty: true });
-});
-
-app.configure('production', function(){
-    app.use(express.errorHandler());
-});
+//});
 
 // Routes
 
@@ -218,6 +212,23 @@ app.all('/proxy/*', function (req, res) {
     }
 });  
 
+if (app.get('env') == 'development') {
 
-app.listen(CONFIG.port);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+//app.configure('development', function(){
+    app.use(errorHandler({ dumpExceptions: true, showStack: true }));
+    app.set('view options', { pretty: true });
+//});
+
+} else {
+
+//app.configure('production', function(){
+    app.use(errorHandler());
+//});
+
+}
+
+
+
+app.listen(CONFIG.port, function() {
+	console.log("Express server listening on port %d in %s mode", app.get('port'), app.settings.env);
+});

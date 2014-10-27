@@ -1,29 +1,32 @@
-- var config_colors_script = 'var config_colors = '+JSON.stringify(colors)
-script
-  !{config_colors_script};
-  channel = "#{channel}";
-  
-.row
-  .span12
-    .page-header
-      .row
-        h1.span9 Live results for #{channel}
-        div.btn-group.pull-right
-          - escapedchannel = encodeURIComponent(channel);
-          a(href='/live/#{escapedchannel}').btn.btn-success #{channel}
-            a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
-              span.caret
-            ul.dropdown-menu
-              - for(var i=0;i<channels.length;i++)
-                li
-                  - escapedchannel = encodeURIComponent(channels[i])
-                  a(href='/live/#{escapedchannel}') #{channels[i]}
+extends layout
 
-    div(id='error').alert.alert-block.alert-error.fade.in.hide
-      a(data-dismiss='alert',href='#').close &times;
-      h4.alert-heading Fail!
-      p(id='errortext').
-        Will be set by javascript
-    div(id='logbox').logbox
-      table
-        tbody(id='logboxtablebody')
+block body
+  - var config_colors_script = 'var config_colors = '+JSON.stringify(colors)
+  script
+    | !{config_colors_script};
+    | channel = "#{channel}";
+  
+  .row
+    .span12
+      .page-header
+        .row
+          h1.span9 Live results for #{channel}
+          div.btn-group.pull-right
+            - escapedchannel = encodeURIComponent(channel);
+            a(href='/live/#{escapedchannel}').btn.btn-success #{channel}
+              a(data-toggle='dropdown',href='#').btn.btn-success.dropdown-toggle
+                span.caret
+              ul.dropdown-menu
+                - for(var i=0;i<channels.length;i++)
+                  li
+                    - escapedchannel = encodeURIComponent(channels[i])
+                    a(href='/live/#{escapedchannel}') #{channels[i]}
+
+      div(id='error').alert.alert-block.alert-error.fade.in.hide
+        a(data-dismiss='alert',href='#').close &times;
+        h4.alert-heading Fail!
+        p(id='errortext').
+          | Will be set by javascript
+      div(id='logbox').logbox
+        table
+          tbody(id='logboxtablebody')

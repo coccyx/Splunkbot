@@ -70,7 +70,11 @@ function writeResults(results, channel) {
 }
 
 
-for (var i=0; i < WEBCONFIG.channels.length; i++) {
+var doit = function(i) {
+    if (i >= WEBCONFIG.channels.length) {
+        return;
+    }
+
     var channel = WEBCONFIG.channels[i];
     var searchstring = 'search `irclogs` | search [ search `irclogs` | search to='+channel+' | '
                         +'stats count by nick | sort 15 -count | fields nick | format ] | '
@@ -82,8 +86,13 @@ for (var i=0; i < WEBCONFIG.channels.length; i++) {
 
     // console.log("Search: "+searchstring);
     splunk.search(searchstring, function(err, results) {
-        writeResults(results, channel);
+        if (!(typeof results.messages[0] == 'object' && results.messages[0].type == 'FATAL')) {
+            writeResults(results, channel);
+        }
+        doit(i+1);
     }, "-7d", "now");
-}
+};
+
+doit(0);
 
 // writeResults(testresults);

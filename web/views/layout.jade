@@ -1,19 +1,19 @@
-!!! 5
+doctype html
 html
   head
     title Splunkbot Web Interface
     link(rel='stylesheet', href='/bootstrap/css/bootstrap.css')
     style(type='text/css')
-          body {
-          padding-top: 60px;
-          padding-bottom: 40px;
-          }
+      | body {
+      | padding-top: 60px;
+      | padding-bottom: 40px;
+      | }
     link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.css')
     link(rel='stylesheet', href='/splunkbot/splunkbot.css')
     link(rel='stylesheet', href='/timeline.css')
     script(src='/bootstrap/js/jquery.js')
     script
-      serverTZOffset = #{serverTZOffset}
+      | serverTZOffset = #{serverTZOffset}
   body
     .navbar.navbar-fixed-top
       .navbar-inner
@@ -60,6 +60,7 @@ html
               input(type='text', placeholder='#{placeholder}', name='q').search-query.span2
     .container
       != body
+      block body
       hr
       footer
         p &copy; Splunk 2012
@@ -78,4 +79,4 @@ html
     script(src='/splunkbot/splunkbot.js')
     script(src='/splunkbot/client/splunk.js')
     script(src='/spin.js')
-    script(src='/sprintf-0.7-beta1.js');
+    script(src='/sprintf-0.7-beta1.js')
